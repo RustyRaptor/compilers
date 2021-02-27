@@ -32,8 +32,20 @@ $$0 \Rightarrow (\epsilon) 3 \Rightarrow (\epsilon) 2 \Rightarrow (\epsilon) 1 \
 
 ### 3.7.3
 #### a
-- $a|b$
-![step 1](thompson1.png)
 
-- $(a|b)*$
+##### NFA $(a|b)*$
+
 ![step 2](thompson2.png)
+
+##### Transition Table
+
+| State          | a   | b   | a + $\epsilon$    | b + $\epsilon$    |
+|----------------|-----|-----|-------------------|-------------------|
+| X: {1,2,3,6}   | {4} | {7} | {4,3,2,6,8}       | {7,3,2,6,8}       |
+| Y: {4,3,2,6,8} | {4} | {7} | {4,3,2,6,8}       | {7,3,2,6,8}       |
+| Z: {7,3,2,6,8} | {4} | {7} | {4,3,2,6,8}       | {7,3,2,6,8}       |
+
+
+##### DFA
+
+![A](thompson1.png)

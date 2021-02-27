@@ -351,16 +351,48 @@ pre[data-line] .line-highlight[data-end]:after {
 
 <h4 class="mume-header" id="a-1">a</h4>
 
-<ul>
-<li>
-<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi mathvariant="normal">&#x2223;</mi><mi>b</mi></mrow><annotation encoding="application/x-tex">a|b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">a</span><span class="mord">&#x2223;</span><span class="mord mathnormal">b</span></span></span></span><br>
-<img src="thompson1.png" alt="step 1"></p>
-</li>
-<li>
-<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>a</mi><mi mathvariant="normal">&#x2223;</mi><mi>b</mi><mo stretchy="false">)</mo><mo>&#x2217;</mo></mrow><annotation encoding="application/x-tex">(a|b)*</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mord">&#x2223;</span><span class="mord mathnormal">b</span><span class="mclose">)</span><span class="mord">&#x2217;</span></span></span></span><br>
-<img src="thompson2.png" alt="step 2"></p>
-</li>
-</ul>
+<h5 class="mume-header" id="nfa-ab">NFA <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>a</mi><mi mathvariant="normal">&#x2223;</mi><mi>b</mi><mo stretchy="false">)</mo><mo>&#x2217;</mo></mrow><annotation encoding="application/x-tex">(a|b)*</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mord">&#x2223;</span><span class="mord mathnormal">b</span><span class="mclose">)</span><span class="mord">&#x2217;</span></span></span></span></h5>
+
+<p><img src="thompson2.png" alt="step 2"></p>
+<h5 class="mume-header" id="transition-table">Transition Table</h5>
+
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>a</th>
+<th>b</th>
+<th>a + <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>&#x3F5;</mi></mrow><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">&#x3F5;</span></span></span></span></th>
+<th>b + <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>&#x3F5;</mi></mrow><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">&#x3F5;</span></span></span></span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X: {1,2,3,6}</td>
+<td>{4}</td>
+<td>{7}</td>
+<td>{4,3,2,6,8}</td>
+<td>{7,3,2,6,8}</td>
+</tr>
+<tr>
+<td>Y: {4,3,2,6,8}</td>
+<td>{4}</td>
+<td>{7}</td>
+<td>{4,3,2,6,8}</td>
+<td>{7,3,2,6,8}</td>
+</tr>
+<tr>
+<td>Z: {7,3,2,6,8}</td>
+<td>{4}</td>
+<td>{7}</td>
+<td>{4,3,2,6,8}</td>
+<td>{7,3,2,6,8}</td>
+</tr>
+</tbody>
+</table>
+<h5 class="mume-header" id="dfa">DFA</h5>
+
+<p><img src="thompson1.png" alt="A"></p>
 
       </div>
       
