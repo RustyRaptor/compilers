@@ -4,9 +4,9 @@
 #include "symtable.h"
 int yylex();
 
-int regSize = 99999;
+int regSize = 5; // created variable to hold size of the regs array
 
-int regs[9999];
+int regs[5]; // changed size to be big enough
 int base, debugsw;
 
 void yyerror (s)  /* Called by yyparse on error */
@@ -17,10 +17,11 @@ void yyerror (s)  /* Called by yyparse on error */
 
 
 %}
-/*  defines the start symbol, what values come back from LEX and how the operators are associated  */
+/*  defines the start symbol, what values come back from LEX and how the operators are associated changed to P  */
+/* changed to P  */
+%start P 
 
-%start P
-
+/* Defines possible types */
 %union
 {
     int value;
@@ -28,10 +29,17 @@ void yyerror (s)  /* Called by yyparse on error */
 }
 
 
+/*
+
+ set expr to have type value
+ INTEGER is type value
+ VARIABLE is type string
+  */
 %type <value> expr
 
 %token <value> INTEGER
 %token <string> VARIABLE
+
 %token T_INT
 
 %left '|'
@@ -53,15 +61,21 @@ void yyerror (s)  /* Called by yyparse on error */
 
 %%    /* end specs, begin rules */
 
+/* add the context free grammar rules */
+
+/* start */
 P       :   DECLS list
         ;
 
+/* define DECLS as declarations or empty */
 DECLS   :   DECLS DECL 
         |   /* empty */ 
         ;
 
+/* define declaration as int var; newline */
 DECL    : T_INT VARIABLE ';' '\n'  
         {
+                /* check if the variable exists then insert or barf */
                 if (Search($2) == 1 ) {
                         printf("The variable exists already");
                 } else if (size >= regSize) {
@@ -71,28 +85,6 @@ DECL    : T_INT VARIABLE ';' '\n'
                         
                 }
 
-                
-                
-                // check if VARIABLE $2 is already defined
-                // if not check to make sure our symtab has enuf room
-                // you should make a global variable that defines the size
-                // of our memory
-        };
-
-DECL    : T_INT VARIABLE '=' expr ';' '\n'  
-        {
-                if (Search($2) == 1 ) {
-                        printf("The variable exists already");
-                } else if (size >= regSize) {
-                        printf("The table is full");
-                } else {
-                        Insert($2, size);
-                        regs[FetchAddress($2)] = $4;
-                }
-                // check if VARIABLE $2 is already defined
-                // if not check to make sure our symtab has enuf room
-                // you should make a global variable that defines the size
-                // of our memory
         };
 
 list    :    /* empty */
@@ -104,7 +96,9 @@ list    :    /* empty */
 stat    :    expr
             { fprintf(stderr,"The answer is %d\n", $1); }
         |       VARIABLE '=' expr { 
+                        // check if it exists first or barf
                         if (Search($1) == 1) { 
+                                // now we get the correct address from the table
                                 regs[FetchAddress($1)] = $3;
                         } else {
                                 printf("Undefined variable");
@@ -131,13 +125,17 @@ expr    :    '(' expr ')'
             { $$ = -$2; }
     |   VARIABLE
         {
-                if (Search($1) == 1) { 
-                                $$ = regs[FetchAddress($1)]; 
-                        } else {
-                                printf("Undefined variable");
-                        }
+                // check if it exists before trying to access
+                if (Search($1) == 0) { 
+                        printf("Undefined variable %s\n", $1);
+                        $$ = 0; // give it a default value
+                        
+                } else {
+                        
+                        // get the address to find value
+                        $$ = regs[FetchAddress($1)]; 
+                }
                 
-                /* fprintf(stderr,"Found a variable value = %d\n",$$); */ 
         }
     |    INTEGER {$$=$1; fprintf(stderr,"found an integer \n");}
     ;

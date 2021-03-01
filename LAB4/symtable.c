@@ -233,6 +233,9 @@ void Delete(char *sym)
 /*
 FetchAddress
 
+input: char variable
+output: integer address
+
 Modified version of Search. Returns the address integer instead of flag.
 */
 int FetchAddress(char *s)

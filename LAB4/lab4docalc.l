@@ -19,12 +19,12 @@ int yylex();
         - added an entry for parenthesis to the tokens directive
         - added int directive to return T_INT token
         - changed the directive for VARIABLE to accept multichar variables
+        - added semicolon as a token
         */
 %%
 "int" {
     return(T_INT);
 }
-
 [a-zA-Z][a-zA-Z0-9]* {
         if (mydebug) fprintf(stderr,"Letter found\n");
         yylval.string=strdup(yytext);

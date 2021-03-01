@@ -23,4 +23,4 @@ memcheck:
 
 # executes our code to test it's functionality
 test:
-	./lab4
+	./lab4 < testinput.txt
