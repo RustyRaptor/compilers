@@ -15,20 +15,18 @@ int yylex();
 
 %}
 
-        /*
-        - added an entry for parenthesis to the tokens directive
-        - added int directive to return T_INT token
-        - changed the directive for VARIABLE to accept multichar variables
-        - added semicolon as a token
-        */
+/*
+CHANGES:
+        - added the DECAF tokens
+*/
+
 %%
 "&&"                    {return(T_AND);}
 "="                     {return(T_ASSIGN);}
 "bool"                  {return(T_BOOLTYPE);}
 "break"                 {return(T_BREAK);}
-"char_lit"              {return(T_CHARCONSTANT);}
 "continue"              {return(T_CONTINUE);}
-"."                     {return(T_DOT);}
+\.                      {return(T_DOT);}
 "else"                  {return(T_ELSE);}
 "=="                    {return(T_EQ);}
 "extern"                {return(T_EXTERN);}
@@ -37,9 +35,7 @@ int yylex();
 "func"                  {return(T_FUNC);}
 ">="                    {return(T_GEQ);}
 ">"                     {return(T_GT);}
-"identifier"            {return(T_ID);}
 "if"                    {return(T_IF);}
-"int_lit"               {return(T_INTCONSTANT);}
 "int"                   {return(T_INTTYPE);}
 "<<"                    {return(T_LEFTSHIFT);}
 "<="                    {return(T_LEQ);}
@@ -49,33 +45,40 @@ int yylex();
 "package"               {return(T_PACKAGE);}
 "return"                {return(T_RETURN);}
 ">>"                    {return(T_RIGHTSHIFT);}
-"string_lit"            {return(T_STRINGCONSTANT);}
 "string"                {return(T_STRINGTYPE);}
 "true"                  {return(T_TRUE);}
 "var"                   {return(T_VAR);}
 "void"                  {return(T_VOID);}
-"whil"                  {return(T_WHILE);}
+"while"                 {return(T_WHILE);}
 
-"int" {
-    return(T_INT);
+\'.\' {
+        yylval.value=yytext[1];
+        return(T_CHARCONSTANT);
 }
-[a-zA-Z][a-zA-Z0-9]* {
-        if (mydebug) fprintf(stderr,"Letter found\n");
-        yylval.string=strdup(yytext);
-        return(VARIABLE);
 
+\".*\" {
+        yylval.string=strdup(yytext);
+        return(T_STRINGCONSTANT);
+}
+
+[a-zA-Z][a-zA-Z0-9_]* {
+        if (mydebug) {
+                fprintf(stderr,"Letter found\n");
+        }
+        yylval.string=strdup(yytext);
+        return(T_ID);
 }
 [0-9][0-9]* {
         if (mydebug) fprintf(stderr,"Digit found\n"); 
         yylval.value=atoi((const char *)yytext);
-        return(INTEGER);
+        return(T_INTCONSTANT);
 }
 
 [ \t] {
         if (mydebug) fprintf(stderr,"Whitespace found\n");
 }
 
-[=\-+*/%&|();^] {
+[=\-+*/%();{},\[\]<>!] {
         if (mydebug) fprintf(stderr,"return a token %c\n",*yytext); 
         return (*yytext);
 }
@@ -84,6 +87,7 @@ int yylex();
         if (mydebug) fprintf(stderr,"carriage return %c\n",*yytext); 
         return (*yytext);
 }
+\/\/.* { /* this is a comment line for double slash  Return nothing, keep going */ }
 %%
 
 int yywrap(void)
