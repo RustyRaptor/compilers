@@ -28,7 +28,7 @@ int yylex();VAR
 [ \t] {
         if (mydebug) fprintf(stderr,"Whitespace found\n");
 }
-[=\-+*/%&|()] {
+[=\-+*/%&|()\^] {
         if (mydebug) fprintf(stderr,"return a token %c\n",*yytext); 
         return (*yytext);
 }

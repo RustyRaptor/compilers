@@ -26,7 +26,7 @@
  * another instance of SymTab so it is recursive in the sense that the struct
  * uses a pointer to an instance of itself. 
  */
-
+#include <math.h>
 #include "symtable.h"
 
 int size = 0; // stores the current size of the symtable
@@ -251,4 +251,8 @@ int FetchAddress(char *s)
 		p = p->next;
 	}
 	return -1;
+}
+
+int powfuck(int x, int y) {
+        return pow(x, y);
 }

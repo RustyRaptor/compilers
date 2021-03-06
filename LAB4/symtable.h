@@ -13,6 +13,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+
 #ifndef SYMTABLE_H
 #define SYMTABLE_H
 
@@ -29,6 +30,8 @@ void Insert(char *sym, int address); // insert a symbol, and address
 void Display(); // Display the symboltable
 
 int FetchAddress(char *s); // added FetchAddress prototype
+
+int powfuck(int x, int y);
 
 /*
  * Delete()

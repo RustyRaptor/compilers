@@ -2,7 +2,7 @@
 
 # the gcc options so I don't have to copy paste them everywhere
 # any time I make changes to them. 
-FLAGS = -O0 -Wextra -pedantic
+FLAGS = -O0 -Wextra -pedantic 
 
 # Entry point target
 all: lab4
@@ -11,7 +11,7 @@ all: lab4
 lab4: lab4docalc.l lab4docalc.y symtable.c symtable.h
 	lex lab4docalc.l
 	yacc -d lab4docalc.y
-	gcc $(FLAGS) y.tab.c lex.yy.c symtable.c -o lab4
+	gcc $(FLAGS) y.tab.c lex.yy.c symtable.c -o lab4 -lm
 
 # remove the binary and other generated stuff
 clean:

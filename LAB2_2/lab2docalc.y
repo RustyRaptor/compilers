@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <ctype.h>
+#include <math.h>
 int yylex();
 
 int regs[26];
@@ -24,6 +25,7 @@ void yyerror (s)  /* Called by yyparse on error */
 %left '|'
 %left '&'
 %left '+' '-'
+%left '^'
 
 %left '*' '/' '%' '(' /*add a opening parenthesis */
 %left UMINUS
@@ -64,6 +66,8 @@ expr    :    '(' expr ')'
             { $$ = $1 % $3; }
     |    expr '&' expr
             { $$ = $1 & $3; }
+    |    expr '^' expr
+            { $$ = pow($1, $3); }
     |    expr '|' expr
             { $$ = $1 | $3; }
     |    expr '*' expr { $$ = $1 * $3; }
