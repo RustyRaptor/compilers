@@ -42,9 +42,9 @@ package GreatestCommonDivisor {
     }
 }
 ```
-Notation
+### Notation
 The syntax is specified using Extended Backus-Naur Form (Links to an external site.) (EBNF):
-
+```
 Production  = production_name "=" [ Expression ] "." .
 Expression  = Alternative { "|" Alternative } .
 Alternative = Term { Term } .
@@ -65,13 +65,13 @@ Productions are expressions constructed from terms and the following operators, 
 Lower-case production names are used to identify lexical tokens. Non-terminals are in CamelCase. Lexical tokens are enclosed in double quotes “” or back quotes \`\`.
 
 The form a ... b represents the set of characters from a through b as alternatives. The horizontal ellipsis ... is also used elsewhere in the spec to informally denote various enumerations or code snippets that are not further specified. The character ... is not a token of the Decaf language.
-
-Source code representation
+```
+### Source code representation
 Decaf source code is encoded as ASCII text. Upper and lower case characters are considered different characters. For example, if is defined as a keyword, but IF would be considered an identifier.
 
 ASCII table
 The ASCII table and decimal equivalent for each character is shown below:
-
+```
   0 nul    1 soh    2 stx    3 etx    4 eot    5 enq    6 ack    7 bel
   8 bs     9 ht    10 nl    11 vt    12 np    13 cr    14 so    15 si
  16 dle   17 dc1   18 dc2   19 dc3   20 dc4   21 nak   22 syn   23 etb
@@ -88,17 +88,18 @@ The ASCII table and decimal equivalent for each character is shown below:
 104  h   105  i   106  j   107  k   108  l   109  m   110  n   111  o
 112  p   113  q   114  r   115  s   116  t   117  u   118  v   119  w
 120  x   121  y   122  z   123  {   124  |   125  }   126  ~   127 del
-The set of valid characters in Decaf is all the ASCII characters:
-
+```
+##### The set of valid characters in Decaf is all the ASCII characters:
+```
 all_char = /* all ASCII characters from 7 ... 13 and 32 ... 126 */ .
 char = /* all ASCII characters from 7 ... 13 and 32 ... 126 except char 10 "\n", char 92 "\" and char 34 """ */ 
 char_lit_chars = /* all ASCII characters from 7 ... 13 and 32 ... 126 except char 39 "'" and char 92 "\" */ .
 char_no_nl = /* all ASCII characters from 7 ... 13 and 32 ... 126 except char 10 "\n" */ .
 Implementation restriction: For compatibility with other tools, a compiler should always disallow the nul character (decimal: 0) in the source text.
-
-Letters and Digits
+```
+### Letters and Digits
 The underscore character _ is considered a letter.
-
+```
 letter        = "A" ... "Z" | "a" ... "z".
 decimal_digit = "0" ... "9" .
 hex_digit     = "0" ... "9" | "A" ... "F" | "a" ... "f" .
@@ -124,81 +125,97 @@ The following are special characters that are not part of white space:
 
 bell         = /* ASCII character bel : '\a' */ .
 backspace    = /* ASCII character bs : '\b' */ .
-Tokens
+```
+### Tokens
 Tokens are the vocabulary of the Decaf language. There are four classes: identifiers, keywords, operators and literals. White space is ignored except as it separates tokens that would otherwise combine into a single token. For example, int3 is a single token but int 3 is two tokens, a keyword int and integer 3; and int(3) is a sequence of four tokens: int, (, 3 and ).
 
 While breaking the input into tokens, the next token is the longest sequence of characters that form a valid token.
 
-Semicolons
+### Semicolons
 The Decaf language uses semicolons ; as a terminator in a number of productions.
 
-Identifiers
+### Identifiers
 Identifiers name program entities such as variables and types. An identifier is a sequence of one or more letters and digits. The first character in an identifier must be a letter.
-
+```
 identifier = letter { letter | digit | _  } .
-For example:
-
+```
+##### For example:
+```
 a
 x9
 ThisVariableIsInCamelCase
 Type and constant identifiers are predeclared.
-
-Keywords
+```
+### Keywords
 The following keywords are reserved and may not be used as identifiers.
-
+```
 bool    break   continue  else   extern  false   
 for     func    if        int    null    package 
 return  string  true      var    void    while  
-Operators and Delimiters
+```
+### Operators and Delimiters
 The following character sequences represent operators (see Operators section below) and delimiters.
-
+```
 {  }   [   ]   ,   ;   (   )  =  
 -  !   +   *   /   <<  >>  <  >  
 %  <=  >=  ==  !=  &&  ||  .
-Integer literals
+```
+### Integer literals
 An integer literal is a sequence of digits representing an integer constant. An optional prefix sets a non-decimal base: 0x or 0X for hexadecimal. In hexadecimal literals, letters a-f and A-F represent values 10 through 15.
-
+```
 int_lit     = decimal_lit | hex_lit .
 decimal_lit = { decimal_digit }+ .
 hex_lit     = "0" ( "x" | "X" ) { hex_digit }+ .
-For example, the following are integer literals:
+```
 
+##### For example, the following are integer literals:
+
+```
 42
 0xBadFace
 170141183460469231731687303715884105727
+```
+
 For integer literals, the semantics of range checking occurs later, so that a long sequence of digits such as the last example above which is clearly out of range is still scanned as a single token. The semantic analyzer will come in later and reject this lexeme value as a valid integer constant.
 
  
 
-String literals
+### String literals
 A string literal represents a string constant obtained from concatenating a sequence of characters (also see the Constants section below).
-
+```
 string_lit = `"` { char | escaped_char } `"` .
+```
 A string literal must start and end on a single line, it cannot be split over multiple lines. It can include escape sequences like \n and this is distinct from a newline character inside the string constant.
 
-For example, the following is legal:
-
+##### For example, the following is legal:
+```
 "\n" 
+```
 But the following is not legal:
-
+```
 "
 "
+```
 
 Empty strings are allowed.
+```
 ""
+```
  
 
-Type literals
+### Type literals
 The following are the keywords used to specify Decaf types.
-
+```
 int bool void string
-Boolean constant literals
+```
+### Boolean constant literals
 The following keywords are used as constants for boolean types.
-
+```
 true false
-List of Tokens
+```
+### List of Tokens
 The following is an alphabetically sorted list of tokens for Decaf. These are the Token names you shall use in your implementation.   Single character tokens will be sent from LEX to YACC as single character values.
-
+```
 T_AND            &&
 T_ASSIGN         =
 T_BOOLTYPE       bool
@@ -232,80 +249,93 @@ T_TRUE           true
 T_VAR            var
 T_VOID           void
 T_WHILE          while
-Types
+```
+### Types
 Decaf has four types: void, booleans, integers and strings. String types, however, can only be used with extern functions. Void types are for return types of functions only (called MethodType below) and not used in variable declarations.
-
+```
 ExternType = ( string | Type ) .
 Type = ( int | bool ) .
 MethodType = ( void | Type ) .
+```
 Decaf also has a limited array type for arrays of integers and booleans.
 
-Boolean types
+### Boolean types
 A boolean type represents the set of Boolean truth values denoted by the predeclared constants true and false. The predeclared boolean type is bool. This is represented as the LLVM type Int1.
-
+```
 BoolConstant = ( true | false ) .
 Integer types
 A integer type refers to the set of all signed 32 bit integers (-2147483648 to 2147483647) corresponding to the LLVM type Int32. The predeclared integer type is int.
-
-String types
+```
+### String types
 A string type represents the set of string values. A string value is a (possibly empty) sequence of bytes. Strings are immutable: once created, it is impossible to change the contents of a string. The predeclared string type is string.
 
-Array types
+### Array types
 Decaf has integer and boolean arrays.
-
+```
 ArrayType = "[" int_lit "]" Type .
+```
 All arrays are one-dimensional and have a size that is fixed at compile-time. Arrays are indexed from 0 to n − 1, where n > 0 is the size of the array. The usual bracket notation is used to index arrays. Since arrays have a compile-time fixed size and cannot be declared as method parameters, there is no facility to query the length of an array variable in Decaf.
 
-Constants
+### Constants
 Decaf has boolean constants, integer constants, and string constants. Integer constants can be created using character literals and integer literals. BoolConstant is defined (in the Types section) as either true or false.
-
+```
 Constant = ( int_lit |  BoolConstant ) .
+```
 String constants can only be used with extern functions. See the Types section for more details.
 
-Decaf program structure
-Program
+### Decaf program structure
+#### Program
+
 A Decaf program starts with optional external function declarations followed by the package definition (a Decaf package is like a module or namespace). A package has optional global variables (called field variables) followed by method (function) definitions.
-
+```
 Program = Externs package identifier "{" FieldDecls MethodDecls "}" .
-External Functions
+```
+#### External Functions
 A Decaf program can access external function that are linked, such as the Decaf standard library functions which are implemented in C, and accessed from within the Decaf program as external functions. For now, only external functions are allowed. External data cannot be declared.
-
+```
 Externs    = { ExternDefn } .
 ExternDefn = extern func identifier "(" [ { ExternType }+, ] ")" MethodType ";" .
+```
 Global variables
 Decaf has global variables with scope limited to their package that appear before any method declarations. Global variables in Decaf are called field declarations.  Variables are always defined using the var reserved word.
-
+```
 FieldDecls = { FieldDecl } .
 FieldDecl  = var identifier  Type ";" .
 FieldDecl  = var  identifier  ArrayType ";" .
-
+```
 The assignment to an identifier has to be a constant:
-
+```
 package foo { var a int; var b int = a; } // Invalid!
+```
 The following is an example of an array field declaration. Notice the array type has the length before the type of the elements of the array.
-
+```
 package foo { var list [100]int; } // Array declaration
-Method declarations
+```
+#### Method declarations
 Functions or methods in Decaf start with the reserved word func, then the name of the method and in parentheses is the argument list followed by the return type of the method.
-
+```
 MethodDecls = { MethodDecl } .
 MethodDecl  = func identifier "(" [ { identifier Type }+, ] ")" MethodType Block .
+```
 The program must contain a declaration for a method called main that has no parameters. The return type of the method main can be either type int or void. Execution of a Decaf program starts at this method main. Methods defined as part of a package can have zero or more parameters and must have a return statement of type MethodType explicitly or implicitly defined, e.g. if your main function which does not have an explicit return statement can either have a either int or void.
 
-Blocks
+#### Blocks
 Decaf blocks have a section for local variable definitions first followed by statements.
-
+```
 Block = "{" VarDecls Statements "}" .
-Variable Declarations
+```
+#### Variable Declarations
 Local variables are declared using the reserved word var followed by an identifier for  and followed by the type of the variable. They cannot be assigned a value when they are defined.
-
+```
 VarDecls = { VarDecl } .
 VarDecl  = var  identifier  Type ";.
 VarDecl  = var identifier  ArrayType ";"
  .
+ ```
 There is no assignment allowed for local variables:
-
+```
 func foo() int { var a int = 10; } // Invalid!
+```
 Statements
 Statements in Decaf consist of variable assignment, method calls, syntax for various kinds of control flow, special statements for breaking out of or continuing to the top of the block.
 
