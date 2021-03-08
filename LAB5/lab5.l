@@ -12,7 +12,28 @@
 
 #include "y.tab.h"
 int yylex();
-int mydebug=1;
+int mydebug=0;
+
+int readHexValue(char * inch)
+{
+  int val;
+  if (*inch >= '0' && *inch <= '9') val = (*inch - '0') * 16;
+  else if (*inch >= 'a' && *inch <= 'f') val = (*inch - 'a' + 10) * 16;
+  else if (*inch >= 'A' && *inch <='F') val = (*inch - 'A' + 10) * 16;
+
+
+
+  char *inchptr;
+  for (inchptr = inch; *inchptr != '\0'; inchptr++){
+        if (*inchptr >= '0' && *inchptr <= '9') val += (*inchptr - '0');
+        else if (*inchptr >= 'a' && *inchptr <= 'f') val += (*inchptr - 'a' + 10);
+        else if (*inchptr >= 'A' && *inchptr <='F') val += (*inchptr - 'A' + 10);
+  }
+
+  printf("The hex value is: %d\n", val);
+  
+  return val;
+}
 
 %}
 
@@ -42,7 +63,8 @@ CHANGES:
 "func"                  {return(T_FUNC);}
 ">="                    {return(T_GEQ);}
 ">"                     {return(T_GT);}
-"if"                    {return(T_IF);}
+"<"                     {return(T_LT);}
+"if"                    {if (mydebug) fprintf(stderr,"T_IF found\n");return(T_IF);}
 
 "int" {
         if (mydebug) fprintf(stderr,"T_INTTYPE found\n");
@@ -59,7 +81,7 @@ CHANGES:
 ">>"                    {return(T_RIGHTSHIFT);}
 "string"                {return(T_STRINGTYPE);}
 "true"                  {return(T_TRUE);}
-"var"                   {return(T_VAR);}
+"var"                   {if (mydebug) fprintf(stderr,"T_VAR found\n");return(T_VAR);}
 "void"                  {if (mydebug) fprintf(stderr,"T_VOID found\n");return(T_VOID);}
 "while"                 {return(T_WHILE);}
 
@@ -75,13 +97,13 @@ CHANGES:
 
 [a-zA-Z][a-zA-Z0-9_]* {
         if (mydebug) {
-                fprintf(stderr,"Letter found %s\n", yytext);
+                fprintf(stderr,"Identifier found %s\n", yytext);
         }
         yylval.string=strdup(yytext);
         return(T_ID);
 }
 [0-9][0-9]* {
-        if (mydebug) fprintf(stderr,"Digit found\n"); 
+        if (mydebug) fprintf(stderr,"Integer found %s\n", yytext); 
         yylval.value=atoi((const char *)yytext);
         return(T_INTCONSTANT);
 }
@@ -90,7 +112,7 @@ CHANGES:
         if (mydebug) fprintf(stderr,"Whitespace found\n");
 }
 
-[\-+*/%();{},\[\]<>!] {
+[\-+*/%();{},\[\]!] {
         if (mydebug) fprintf(stderr,"return a token %c\n",*yytext); 
         return (*yytext);
 }
@@ -103,8 +125,3 @@ CHANGES:
 
 int yywrap(void)
 { return 1;}
-
-/* void yyerror(const char *str)
-{
-    fprintf(stderr,"Error | Line: %d\n%s\n",yylineno,str);
-} */

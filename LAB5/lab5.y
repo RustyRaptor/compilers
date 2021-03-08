@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 int yylex();
 
@@ -7,8 +8,8 @@ extern int yylineno;
 void yyerror (s)  /* Called by yyparse on error */
      char *s;
 {
-  printf ("%s \n", s);
-  printf ("FUCK SHIT %d \n", yylineno);
+  fprintf(stderr, "%s \n", s);
+  fprintf(stderr, "Error on line:  %d \n", yylineno);
 }
 
 
@@ -40,6 +41,7 @@ from LEX and how the operators are associated */
 %token T_FUNC
 %token T_GEQ
 %token T_GT
+%token T_LT
 %token T_ID
 %token T_IF
 %token T_INTCONSTANT
@@ -112,7 +114,7 @@ Block              : '{' VarDecls Statements '}'
                    ;
 
 VarDecls           : /* empty */
-                   | VarDecl 
+                   | VarDecl VarDecls
                    ;
 
 VarDecl            : T_VAR T_ID Type ';'
@@ -122,7 +124,7 @@ VarDecl            : T_VAR T_ID ArrayType ';'
                    ;
 
 Statements         : /* empty */
-                   | Statement 
+                   | Statement Statements
                    ;
 
 Statement          : Block
@@ -145,13 +147,19 @@ MethodCall         : T_ID '(' MethodArgs ')'
                    ;
 
 MethodArg          : Expr
+                   | T_STRINGCONSTANT
                    ;
 
 MethodArgs         : /* empty */
-                   | MethodArg MethodArgs
+                   | FullMethodArgs
+                   ;
+
+FullMethodArgs     : MethodArg
+                   | MethodArg ',' MethodArgs
                    ;
 
 Statement          : T_IF '(' Expr ')' Block T_ELSE Block 
+                   | T_IF '(' Expr ')' Block
                    ;
 
 Statement          : T_WHILE '(' Expr ')' Block
@@ -175,7 +183,7 @@ Simpleexpression   : Additiveexpression
                    | Simpleexpression Relop Additiveexpression
                    ;
 
-Relop              : T_LEQ | '<' | '>' | T_GEQ | T_EQ | T_NEQ
+Relop              : T_LEQ | T_LT | T_GT | T_GEQ | T_EQ | T_NEQ
                    ;
 
 Additiveexpression : Term
@@ -189,7 +197,7 @@ Term               : Factor
                    | Term Multop Factor
                    ;
 
-Multop             : '*' | '/' | T_AND | T_OR | T_LEFTSHIFT | T_RIGHTSHIFT
+Multop             : '*' | '/' | '%' | T_AND | T_OR | T_LEFTSHIFT | T_RIGHTSHIFT
                    ;
 
 Factor             : T_ID
@@ -224,6 +232,7 @@ ArrayType         : '[' T_INTCONSTANT ']' Type
                   ;
 
 Constant          : T_INTCONSTANT
+                  | T_STRINGCONSTANT
                   | BoolConstant
                   ;
 %%    /* end of rules, start of program */
