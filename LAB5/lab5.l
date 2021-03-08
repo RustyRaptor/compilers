@@ -1,17 +1,18 @@
-        /*                 Small LEX routine which returns two formal tokens (INTEGER and VARIABLE)
-                   along with single string elements like '+'.
- 
-                    This LEX definition is the companion to the docalc.y YACC routine which
-                   is a simple calculator
+/*      Small LEX routine which returns two formal tokens (INTEGER and VARIABLE)
+        along with single string elements like '+'.
 
-                    Shaun Cooper
-                    January 2015
-        */ 
+        This LEX definition is the companion to the docalc.y YACC routine which
+        is a simple calculator
+
+        Shaun Cooper
+        January 2015
+*/
 
 %{
-int mydebug=0;
+
 #include "y.tab.h"
 int yylex();
+int mydebug=1;
 
 %}
 
@@ -20,9 +21,15 @@ CHANGES:
         - added the DECAF tokens
 */
 
+
 %%
 "&&"                    {return(T_AND);}
-"="                     {return(T_ASSIGN);}
+
+"=" {
+        if (mydebug) fprintf(stderr,"T_ASSIGN found\n");
+        return(T_ASSIGN);
+}
+
 "bool"                  {return(T_BOOLTYPE);}
 "break"                 {return(T_BREAK);}
 "continue"              {return(T_CONTINUE);}
@@ -36,7 +43,12 @@ CHANGES:
 ">="                    {return(T_GEQ);}
 ">"                     {return(T_GT);}
 "if"                    {return(T_IF);}
-"int"                   {return(T_INTTYPE);}
+
+"int" {
+        if (mydebug) fprintf(stderr,"T_INTTYPE found\n");
+        return(T_INTTYPE);
+
+}
 "<<"                    {return(T_LEFTSHIFT);}
 "<="                    {return(T_LEQ);}
 "!="                    {return(T_NEQ);}
@@ -48,7 +60,7 @@ CHANGES:
 "string"                {return(T_STRINGTYPE);}
 "true"                  {return(T_TRUE);}
 "var"                   {return(T_VAR);}
-"void"                  {return(T_VOID);}
+"void"                  {if (mydebug) fprintf(stderr,"T_VOID found\n");return(T_VOID);}
 "while"                 {return(T_WHILE);}
 
 \'.\' {
@@ -63,7 +75,7 @@ CHANGES:
 
 [a-zA-Z][a-zA-Z0-9_]* {
         if (mydebug) {
-                fprintf(stderr,"Letter found\n");
+                fprintf(stderr,"Letter found %s\n", yytext);
         }
         yylval.string=strdup(yytext);
         return(T_ID);
@@ -78,17 +90,21 @@ CHANGES:
         if (mydebug) fprintf(stderr,"Whitespace found\n");
 }
 
-[=\-+*/%();{},\[\]<>!] {
+[\-+*/%();{},\[\]<>!] {
         if (mydebug) fprintf(stderr,"return a token %c\n",*yytext); 
         return (*yytext);
 }
 
 \n {
         if (mydebug) fprintf(stderr,"carriage return %c\n",*yytext); 
-        return (*yytext);
 }
 \/\/.* { /* this is a comment line for double slash  Return nothing, keep going */ }
 %%
 
 int yywrap(void)
 { return 1;}
+
+/* void yyerror(const char *str)
+{
+    fprintf(stderr,"Error | Line: %d\n%s\n",yylineno,str);
+} */

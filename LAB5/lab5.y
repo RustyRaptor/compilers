@@ -3,11 +3,12 @@
 #include <ctype.h>
 int yylex();
 
-
+extern int yylineno;
 void yyerror (s)  /* Called by yyparse on error */
      char *s;
 {
   printf ("%s \n", s);
+  printf ("FUCK SHIT %d \n", yylineno);
 }
 
 
@@ -58,11 +59,14 @@ from LEX and how the operators are associated */
 %token T_VOID
 %token T_WHILE
 
+
+
 %%    /* end specs, begin rules */
 Program            : Externs T_PACKAGE T_ID '{' FieldDecls MethodDecls '}'
                    ;
 
-Externs            :  ExternDefn 
+Externs            : /* empty */ 
+                   | ExternDefn Externs
                    ;
 
 ExternDefn         : T_EXTERN T_FUNC T_ID '(' ExternParmList ')' MethodType ';'
@@ -86,7 +90,7 @@ FieldDecl          : T_VAR T_ID Type ';'
 FieldDecl          : T_VAR T_ID ArrayType ';'
                    ;
 
-FieldDecl          : T_VAR T_ID Type '=' Constant ';'
+FieldDecl          : T_VAR T_ID Type T_ASSIGN Constant ';'
                    ;
 
 MethodDecls        : /* empty */
@@ -101,7 +105,7 @@ IdTypeList         : /* empty */
                    ;
 
 IdTypeList1        : T_ID Type
-                   | T_ID Type ',' IdTypeList1
+                   | T_ID Type ',' IdTypeList
                    ;
 
 Block              : '{' VarDecls Statements '}'
@@ -127,7 +131,7 @@ Statement          : Block
 Statement          : Assign ';'
                    ;
 
-Assign             : Lvalue '=' Expr
+Assign             : Lvalue T_ASSIGN Expr
                    ;
 
 Lvalue             : T_ID
@@ -224,6 +228,8 @@ Constant          : T_INTCONSTANT
                   ;
 %%    /* end of rules, start of program */
 
-int main(){ 
+int main(){
+        
         yyparse();
 }
+
