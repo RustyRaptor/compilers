@@ -1,15 +1,23 @@
+/*
+Ziad Arafat - Mar 8 2021
+Lab 5
+*/
+
 %{
 #include <stdio.h>
-#include <stdlib.h>
 #include <ctype.h>
+
 int yylex();
 
-extern int yylineno;
+extern int yylineno; // import the yylineno variable
 void yyerror (s)  /* Called by yyparse on error */
      char *s;
 {
+        // changed these to output to stderr
   fprintf(stderr, "%s \n", s);
-  fprintf(stderr, "Error on line:  %d \n", yylineno);
+
+  // print out the line number of the syntax error.
+  fprintf(stderr, "Error on line:  %d \n", yylineno); 
 }
 
 
@@ -26,6 +34,7 @@ from LEX and how the operators are associated */
     char* string;
 }
 
+// Added a token for each of the lex tokens
 %token T_AND
 %token T_ASSIGN
 %token T_BOOLTYPE
@@ -41,7 +50,6 @@ from LEX and how the operators are associated */
 %token T_FUNC
 %token T_GEQ
 %token T_GT
-%token T_LT
 %token T_ID
 %token T_IF
 %token T_INTCONSTANT
@@ -61,7 +69,13 @@ from LEX and how the operators are associated */
 %token T_VOID
 %token T_WHILE
 
+/* added all the rules from DECAF and reformatted them to work with Bison */
 
+/* for each of the rules with a list of tokens I created a recursive rule
+that allows for one or more of the token. 
+*/
+
+/* Replaced any instance of '=' with T_ASSIGN */
 
 %%    /* end specs, begin rules */
 Program            : Externs T_PACKAGE T_ID '{' FieldDecls MethodDecls '}'
@@ -135,6 +149,9 @@ Statement          : Assign ';'
 
 Assign             : Lvalue T_ASSIGN Expr
                    ;
+/* Assigns            : Assign
+                   | Assign ',' Assigns
+                   ; */
 
 Lvalue             : T_ID
                    | T_ID '[' Expr ']'
@@ -147,7 +164,6 @@ MethodCall         : T_ID '(' MethodArgs ')'
                    ;
 
 MethodArg          : Expr
-                   | T_STRINGCONSTANT
                    ;
 
 MethodArgs         : /* empty */
@@ -164,6 +180,9 @@ Statement          : T_IF '(' Expr ')' Block T_ELSE Block
 
 Statement          : T_WHILE '(' Expr ')' Block
                    ;
+
+/* Statement          : T_FOR '(' Assigns ';' Expr ';' Assigns ')' Block
+                   ; */
 
 Statement          : T_RETURN ';'
                    | T_RETURN '(' ')' ';'
@@ -183,7 +202,7 @@ Simpleexpression   : Additiveexpression
                    | Simpleexpression Relop Additiveexpression
                    ;
 
-Relop              : T_LEQ | T_LT | T_GT | T_GEQ | T_EQ | T_NEQ
+Relop              : T_LEQ | '<' | T_GT | T_GEQ | T_EQ | T_NEQ
                    ;
 
 Additiveexpression : Term
@@ -196,7 +215,7 @@ Addop              : '+' | '-'
 Term               : Factor
                    | Term Multop Factor
                    ;
-
+/* added modulus as a multi operator */
 Multop             : '*' | '/' | '%' | T_AND | T_OR | T_LEFTSHIFT | T_RIGHTSHIFT
                    ;
 
@@ -230,9 +249,10 @@ BoolConstant      : T_TRUE
 
 ArrayType         : '[' T_INTCONSTANT ']' Type
                   ;
-
+/* added String and Char as constants */
 Constant          : T_INTCONSTANT
                   | T_STRINGCONSTANT
+                  | T_CHARCONSTANT
                   | BoolConstant
                   ;
 %%    /* end of rules, start of program */

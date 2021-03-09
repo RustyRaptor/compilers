@@ -10,7 +10,7 @@ all: lab5
 # Compile all the THINGS!
 lab5: lab5.l lab5.y symtable.c symtable.h
 	lex lab5.l
-	yacc -d lab5.y
+	yacc -d --verbose --debug lab5.y
 	gcc $(FLAGS) y.tab.c lex.yy.c symtable.c -o lab5 -lm
 
 # remove the binary and other generated stuff

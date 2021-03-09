@@ -4,12 +4,12 @@ extern  func print_int(int) void;
 extern  func print_string(string) void;
 
 package foo {
+
       var x int;
       var y int = 100;
       var A[100] bool;
 
-    func foo(x int) void  { 
-              var x int; 
+    func foo(x int) void  { var x int; 
               var x int;
               var y bool;
              while ( x <= y )

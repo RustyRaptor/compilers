@@ -34,13 +34,13 @@ package foo {
        }
 
     func main() int { foo(1); 
-	//     for ( i=1,j=2; i <= k; i=i+1, j=j+2) // for loop
-        //     {
-        //       var x,y,z int;
-        //       var x,y,z bool;
+	    for ( i=1,j=2; i <= k; i=i+1, j=j+2) // for loop
+            {
+              var x,y,z int;
+              var x,y,z bool;
               i = print_int(i);
-	//       x = 0xBad0FF;  // HEX
-        //     }
+	      x = 0xBad0FF;  // HEX
+            }
           }
 
 
