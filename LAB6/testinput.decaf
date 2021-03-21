@@ -1,0 +1,10 @@
+extern func print_int (int, bool) int;
+extern func read_int (int, string) int;
+
+// extern func read_str (string) int;
+// extern func read_int (string) string;
+
+package foo {
+
+
+} // end of foo

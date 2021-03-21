@@ -198,6 +198,7 @@ Statement          : T_CONTINUE ';'
 
 
 Expr               : Simpleexpression
+                   ;
 Simpleexpression   : Additiveexpression
                    | Simpleexpression Relop Additiveexpression
                    ;
@@ -261,4 +262,3 @@ int main(){
         
         yyparse();
 }
-
