@@ -41,15 +41,15 @@ void AST_Print_Type(enum AST_Decaf_Types t)
 	case A_Decaf_INT:
 		printf(" INT ");
 		break;
-        case A_Decaf_BOOL:
-                printf(" BOOL ");
-                break;
-        case A_Decaf_STRING:
-                printf(" STRING ");
-                break;
-        case A_Decaf_VOID:
-                printf(" VOID ");
-                break;
+	case A_Decaf_BOOL:
+		printf(" BOOL ");
+		break;
+	case A_Decaf_STRING:
+		printf(" STRING ");
+		break;
+	case A_Decaf_VOID:
+		printf(" VOID ");
+		break;
 	default:
 		fprintf(stderr, "Unknown AST DECAF TYPE !!!\n");
 	} // of switch
@@ -65,19 +65,32 @@ void ASTprint(int level, ASTnode *p)
 	else {
 		PT(level); /*indent */
 		switch (p->type) {
+		case A_PROGRAM:
+			printf("PROGRAM \n");
+			ASTprint(level + 1, p->S1);
+			ASTprint(level + 1, p->S2);
+			break;
 		case A_EXTERN:
 			printf("EXTERN FUNC %s ", p->name);
-                        printf(" ( ");
-                        ASTprint(level, p->S1);
-                        printf(" ) ");
-                        AST_Print_Type(p->A_Declared_Type);
-                        printf("\n");
+			printf(" ( ");
+			ASTprint(level + 1, p->S1);
+			printf(" ) ");
+			AST_Print_Type(p->A_Declared_Type);
+			printf("\n");
 			break;
-                case A_ExternType:
-			printf("ExternType ");
-                        AST_Print_Type(p->A_Declared_Type);
 
-                        break;
+		case A_PACKAGE:
+			printf("PACKAGE %s", p->name);
+                        printf("{\n");
+                        ASTprint(level + 1, p->S1);
+			ASTprint(level + 1, p->S2);
+			printf("}\n");
+			break;
+		case A_ExternType:
+			printf("ExternType ");
+			AST_Print_Type(p->A_Declared_Type);
+
+			break;
 		case A_VARDEC:
 			printf("Variable ");
 			if ((p->operator) == A_Decaf_VOID)

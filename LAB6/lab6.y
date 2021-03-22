@@ -77,8 +77,8 @@ from LEX and how the operators are associated */
 /* %token <string> T_STRING_LIT
 %token <value> T_INT_LIT */
 
-%type <astnode> Externs ExternDefn FullExternParmList ExternParmList
-%type <asttype> MethodType Type ExternType
+%type <astnode> Externs ExternDefn FullExternParmList ExternParmList FieldDecl FieldDecls
+%type <asttype> MethodType Type ExternType Constant 
 /* %type <astnode> ExternParmList
 %type <astnode> FieldDecls 
 %type <astnode> MethodDecls
@@ -126,7 +126,15 @@ that allows for one or more of the token.
 
 %%    /* end specs, begin rules */
 Program         : Externs T_PACKAGE T_ID '{' FieldDecls MethodDecls '}'
-                { PROGRAM = $1; }
+                {
+                        PROGRAM = ASTCreateNode(A_PROGRAM);
+                        PROGRAM->S1 = $1;
+                        PROGRAM->S2 = ASTCreateNode(A_PACKAGE);
+                        PROGRAM->S2->name = $3;
+                        PROGRAM->S2->S1 = $5; // TODO: Field Decls $5
+                        PROGRAM->S2->S2 = NULL; // TODO: Method Decls $6
+
+                }
                 ;
 
 Externs         : /* empty */ { $$ = NULL; }
@@ -159,18 +167,40 @@ FullExternParmList: ExternType
                         $$->A_Declared_Type = $1;
                         $$->next = $3;
                 }
-                   
                 ;
 
-FieldDecls      : /* empty */ 
-                   | FieldDecl FieldDecls 
-                   
-                   ;
+FieldDecls      : /* empty */ {$$ = NULL;}
+                | FieldDecl FieldDecls
+                {
+                $$ = $1;
+                $$->next = $2;
+                }
+                ;
 
-FieldDecl       : T_VAR T_ID Type ';'
+FieldDecl       : T_VAR T_ID Type ';' 
+                {
+                      $$ = ASTCreateNode(A_VARDEC);
+                      $$->name = $2;
+                      $$->A_Declared_Type = $3;
+
+                }
                 | T_VAR T_ID ArrayType ';'
+                {
+                      $$ = ASTCreateNode(A_VARDEC);
+                      $$->name = $2;
+                //       $$->A_Declared_Type = $3;
+                      // TODO: Implement Arrays
+
+                }
                 | T_VAR T_ID Type T_ASSIGN Constant ';'
-                   ;
+                {
+                      $$ = ASTCreateNode(A_VARDEC);
+                      $$->name = $2;
+                      $$->A_Declared_Type = $3;
+                      $$->value = $5;
+
+                }
+                ;
 
 MethodDecls     : /* empty */ 
                    | MethodDecl MethodDecls 
@@ -321,19 +351,28 @@ MethodType      : T_VOID  { $$ = A_Decaf_VOID; }
                 ;
 
 BoolConstant   : T_TRUE 
-                  | T_FALSE 
+                | T_FALSE 
                    
-                  ;
+                ;
 
 ArrayType      : '[' T_INTCONSTANT ']' Type
                   ;
 /* added String and Char as constants */
-Constant       : T_INTCONSTANT
-                  | T_STRINGCONSTANT 
-                   
-                  | T_CHARCONSTANT 
-                   
-                  | BoolConstant 
+Constant        : T_INTCONSTANT {
+                        $$ = A_Decaf_INT;
+                }
+                
+                | T_STRINGCONSTANT {
+                        $$ = A_Decaf_STRING;
+                }
+
+                | T_CHARCONSTANT {
+                        $$ = A_Decaf_CHAR;
+                }
+
+                | BoolConstant {
+                        $$ = A_Decaf_BOOL;
+                }
                    
                   ;
 %%    /* end of rules, start of program */
@@ -343,5 +382,5 @@ int main(){
         yyparse();
         printf("parsing done\n");
         // We know PROGRAM points to our AST
-        ASTprint(20, PROGRAM);
+        ASTprint(1, PROGRAM);
 }

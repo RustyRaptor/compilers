@@ -17,6 +17,7 @@ static int mydebug;
 sort of production rule we came across */
 
 enum AST_Tree_Element_Type {
+        A_PROGRAM,
 	A_EXTERN,
 	A_PACKAGE,
 	A_METHODDEC,
@@ -43,7 +44,8 @@ enum AST_Decaf_Types {
 	A_Decaf_INT,
 	A_Decaf_BOOL,
 	A_Decaf_VOID,
-        A_Decaf_STRING
+        A_Decaf_STRING,
+        A_Decaf_CHAR
 	// missing
 };
 
