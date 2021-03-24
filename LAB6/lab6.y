@@ -77,8 +77,11 @@ from LEX and how the operators are associated */
 /* %token <string> T_STRING_LIT
 %token <value> T_INT_LIT */
 
-%type <astnode> Externs ExternDefn FullExternParmList ExternParmList FieldDecl FieldDecls
-%type <asttype> MethodType Type ExternType Constant 
+%type <astnode> Externs ExternDefn FullExternParmList ExternParmList FieldDecl
+%type <astnode> FieldDecls ArrayType MethodDecl MethodDecls Block VarDecl
+%type <astnode> IdTypeList IdTypeList1 VarDecls
+%type <asttype> MethodType Type ExternType 
+%type <value> Constant BoolConstant 
 /* %type <astnode> ExternParmList
 %type <astnode> FieldDecls 
 %type <astnode> MethodDecls
@@ -125,51 +128,48 @@ that allows for one or more of the token.
 /* Replaced any instance of '=' with T_ASSIGN */
 
 %%    /* end specs, begin rules */
-Program         : Externs T_PACKAGE T_ID '{' FieldDecls MethodDecls '}'
+Program: Externs T_PACKAGE T_ID '{' FieldDecls MethodDecls '}'
                 {
                         PROGRAM = ASTCreateNode(A_PROGRAM);
                         PROGRAM->S1 = $1;
                         PROGRAM->S2 = ASTCreateNode(A_PACKAGE);
                         PROGRAM->S2->name = $3;
                         PROGRAM->S2->S1 = $5; // TODO: Field Decls $5
-                        PROGRAM->S2->S2 = NULL; // TODO: Method Decls $6
+                        PROGRAM->S2->S2 = $6; // TODO: Method Decls $6
 
                 }
                 ;
 
-Externs         : /* empty */ { $$ = NULL; }
+Externs: /* empty */ { $$ = NULL; }
                 | ExternDefn Externs 
                 { $1->next = $2; }
                 ;
 
-ExternDefn      : T_EXTERN T_FUNC T_ID '(' ExternParmList ')' MethodType ';'
-                        {
-                                $$ = ASTCreateNode(A_EXTERN);
-                                $$->name = $3;
-                                $$->A_Declared_Type = $7; 
-                                $$->S1 = $5;
-                        }
-                   ;
+ExternDefn: 
+        T_EXTERN T_FUNC T_ID '(' ExternParmList ')' MethodType ';' {
+                $$ = ASTCreateNode(A_EXTERN);
+                $$->name = $3;
+                $$->A_Declared_Type = $7; 
+                $$->S1 = $5;
+        };
 
 ExternParmList: /* empty */  { $$ = NULL; }
                 | FullExternParmList {$$ = $1;}  
                 
                 ;
 
-FullExternParmList: ExternType 
-                {
-                        $$ = ASTCreateNode(A_ExternType);
-                        $$->A_Declared_Type = $1;
-                }
-                | ExternType ',' ExternParmList 
-                {
-                        $$ = ASTCreateNode(A_ExternType);
-                        $$->A_Declared_Type = $1;
-                        $$->next = $3;
-                }
-                ;
+FullExternParmList: 
+        ExternType {
+                $$ = ASTCreateNode(A_ExternType);
+                $$->A_Declared_Type = $1;
+        }
+        | ExternType ',' ExternParmList {
+                $$ = ASTCreateNode(A_ExternType);
+                $$->A_Declared_Type = $1;
+                $$->next = $3;
+        };
 
-FieldDecls      : /* empty */ {$$ = NULL;}
+FieldDecls: /* empty */ {$$ = NULL;}
                 | FieldDecl FieldDecls
                 {
                 $$ = $1;
@@ -177,19 +177,19 @@ FieldDecls      : /* empty */ {$$ = NULL;}
                 }
                 ;
 
-FieldDecl       : T_VAR T_ID Type ';' 
+FieldDecl: T_VAR T_ID Type ';' 
                 {
                       $$ = ASTCreateNode(A_VARDEC);
                       $$->name = $2;
-                      $$->A_Declared_Type = $3;
+                      $$->A_Declared_Type = $3; 
 
                 }
                 | T_VAR T_ID ArrayType ';'
                 {
                       $$ = ASTCreateNode(A_VARDEC);
                       $$->name = $2;
-                //       $$->A_Declared_Type = $3;
-                      // TODO: Implement Arrays
+                      $$->S1 = $3;
+                      $$->A_Declared_Type = $3->A_Declared_Type;
 
                 }
                 | T_VAR T_ID Type T_ASSIGN Constant ';'
@@ -202,42 +202,65 @@ FieldDecl       : T_VAR T_ID Type ';'
                 }
                 ;
 
-MethodDecls     : /* empty */ 
-                   | MethodDecl MethodDecls 
-                   
-                   ;
+MethodDecls: /* empty */ {$$ = NULL;}
+                | MethodDecl MethodDecls {
+                        $$ = $1;
+                        $$->next = $2;
+                } 
+                ;
 
-MethodDecl      : T_FUNC T_ID '(' IdTypeList ')' MethodType Block
-                   ;
+MethodDecl: T_FUNC T_ID '(' IdTypeList ')' MethodType Block {
+                $$ = ASTCreateNode(A_METHODDEC);
+                $$->name = $2;
+                $$->A_Declared_Type = $6;
+                $$->S1 = $4; // $4;
+                $$->S2 = $7; // $7;
+        };
 
-IdTypeList      : /* empty */ 
-                   | IdTypeList1 
-                   
-                   ;
+IdTypeList: /* empty */ { $$ = NULL; }
+                | IdTypeList1 { $$ = $1; }
+                ;
 
-IdTypeList1     : T_ID Type
-                   | T_ID Type ',' IdTypeList 
-                   
-                   ;
+IdTypeList1: T_ID Type {
+                $$ = ASTCreateNode(A_METHODID);
+                $$->name = $1;
+                $$->A_Declared_Type = $2;
+        }
+        | T_ID Type ',' IdTypeList  {
+                $$ = ASTCreateNode(A_METHODID);
+                $$->name = $1;
+                $$->A_Declared_Type = $2;
+                $$->next = $4;
+        };
 
-Block           : '{' VarDecls Statements '}'
-                   ;
+Block: '{' VarDecls Statements '}' {
+                $$ = ASTCreateNode(A_BLOCK);
+                $$->S1 = $2;
+        };
 
-VarDecls        : /* empty */ 
-                   | VarDecl VarDecls 
-                   
-                   ;
+VarDecls: /* empty */ { $$ = NULL; }
+        | VarDecl VarDecls {
+                $$ = $1;
+                $$->next = $2;
+        };
 
-VarDecl         : T_VAR T_ID Type ';'
-                | T_VAR T_ID ArrayType ';'
-                   ;
+VarDecl: T_VAR T_ID Type ';' {
+                $$ = ASTCreateNode(A_VARDEC);
+                $$->name = $2;
+                $$->A_Declared_Type = $3;
+        }
+        | T_VAR T_ID ArrayType ';' {
+                $$ = ASTCreateNode(A_VARDEC);
+                $$->name = $2;
+                $$->S1 = $3;
+                $$->A_Declared_Type = $$->S1->A_Declared_Type;
+        };
 
-Statements      : /* empty */ 
-                   | Statement Statements 
-                   
-                   ;
+Statements: /* empty */
+        | Statement Statements
+        ;
 
-Statement       : Block
+Statement: Block
                 | Assign ';'
                 | MethodCall ';'
                 | T_IF '(' Expr ')' Block T_ELSE Block 
@@ -250,73 +273,68 @@ Statement       : Block
                 | T_CONTINUE ';'
                 ;
 
-Assign          : Lvalue T_ASSIGN Expr
+Assign: Lvalue T_ASSIGN Expr
                    ;
-/* Assigns         : Assign
+/* Assigns: Assign
                    | Assign ',' Assigns 
                    
                    ; */
 
-Lvalue          : T_ID
+Lvalue: T_ID
                    | T_ID '[' Expr ']' 
                    
-                   ;
+                ;
 
 
-MethodCall      : T_ID '(' MethodArgs ')'
-                   ;
+MethodCall: T_ID '(' MethodArgs ')'
+                ;
 
-MethodArg       : Expr
-                   ;
+MethodArg: Expr
+                ;
 
-MethodArgs      : /* empty */ 
-                   | FullMethodArgs 
-                   
-                   ;
+MethodArgs: /* empty */ 
+                | FullMethodArgs 
+                ;
 
-FullMethodArgs  : MethodArg
-                   | MethodArg ',' MethodArgs 
-                   
-                   ;
-
+FullMethodArgs: MethodArg
+                | MethodArg ',' MethodArgs
+                ;
 
 
 
 
-/* Statement       : T_FOR '(' Assigns ';' Expr ';' Assigns ')' Block
+/* Statement: T_FOR '(' Assigns ';' Expr ';' Assigns ')' Block
                    ; */
 
 
 
 
 
-Expr            : Simpleexpression
+Expr: Simpleexpression
                    ;
 Simpleexpression: Additiveexpression
                    | Simpleexpression Relop Additiveexpression 
                    
                    ;
 
-Relop           : T_LEQ | '<' | T_GT | T_GEQ | T_EQ | T_NEQ
+Relop: T_LEQ | '<' | T_GT | T_GEQ | T_EQ | T_NEQ
                    ;
 
-Additiveexpression : Term
+Additiveexpression: Term
                    | Additiveexpression Addop Term 
                    
                    ;
 
-Addop           : '+' | '-'
-                   ;
-
-Term            : Factor
-                   | Term Multop Factor 
+Addop: '+' | '-'
                    
+Term: Factor
+                   | Term Multop Factor
                    ;
 /* added modulus as a multi operator */
-Multop          : '*' | '/' | '%' | T_AND | T_OR | T_LEFTSHIFT | T_RIGHTSHIFT
+Multop: '*' | '/' | '%' | T_AND | T_OR | T_LEFTSHIFT | T_RIGHTSHIFT
                    ;
 
-Factor          : T_ID
+Factor: T_ID
                    | MethodCall 
                    
                    | T_ID '[' Expr ']' 
@@ -334,44 +352,52 @@ Factor          : T_ID
 
 
 
-ExternType     : T_STRINGTYPE { $$ = A_Decaf_STRING; }
+ExternType: T_STRINGTYPE { $$ = A_Decaf_STRING; }
                 | Type 
                    
                 ;
 
-Type            : T_INTTYPE 
+Type: T_INTTYPE 
                 { $$ = A_Decaf_INT;}
                 | T_BOOLTYPE  
                 { $$ = A_Decaf_BOOL;}
                 ;
 
-MethodType      : T_VOID  { $$ = A_Decaf_VOID; }
+MethodType: T_VOID  { $$ = A_Decaf_VOID; }
                 | Type { $$ = $1;}
                    
                 ;
 
-BoolConstant   : T_TRUE 
-                | T_FALSE 
+BoolConstant: T_TRUE {
+                $$ = 1;
+                }
+                | T_FALSE {
+                $$ = 0;
+                }
                    
                 ;
 
-ArrayType      : '[' T_INTCONSTANT ']' Type
+ArrayType: '[' T_INTCONSTANT ']' Type {
+                        $$ = ASTCreateNode(A_ARRAYTYPE);
+                        $$->value = $2;
+                        $$->A_Declared_Type = $4;
+                }
                   ;
 /* added String and Char as constants */
-Constant        : T_INTCONSTANT {
-                        $$ = A_Decaf_INT;
+Constant: T_INTCONSTANT {
+                        $$ = $1;
                 }
                 
-                | T_STRINGCONSTANT {
-                        $$ = A_Decaf_STRING;
-                }
+                /* | T_STRINGCONSTANT {
+                        $$ = $1;
+                } */
 
-                | T_CHARCONSTANT {
-                        $$ = A_Decaf_CHAR;
-                }
+                /* | T_CHARCONSTANT {
+                        $$ = $1;
+                } */
 
                 | BoolConstant {
-                        $$ = A_Decaf_BOOL;
+                        $$ = $1;
                 }
                    
                   ;

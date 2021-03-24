@@ -9,4 +9,12 @@ package foo {
         var y_me int = 10;
         var A[100] bool;
 
+        func main ( a int, y bool) void 
+        {
+                var x int;
+                var B[100] int;
+        }
+
+       
+
 } // end of foo

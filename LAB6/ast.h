@@ -27,7 +27,13 @@ enum AST_Tree_Element_Type {
 	A_EXPR,
 	A_PARAM,
 	A_VARDEC,
-        A_ExternType
+        A_ExternType,
+        A_ARRAYTYPE,
+        A_METHODID,
+        A_CONSTANT_INT,
+        A_CONSTANT_BOOL,
+        A_CONSTANT_STRING
+
 
 	// missing
 };

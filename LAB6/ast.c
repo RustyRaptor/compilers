@@ -81,8 +81,8 @@ void ASTprint(int level, ASTnode *p)
 
 		case A_PACKAGE:
 			printf("PACKAGE %s", p->name);
-                        printf("{\n");
-                        ASTprint(level + 1, p->S1);
+			printf("{\n");
+			ASTprint(level + 1, p->S1);
 			ASTprint(level + 1, p->S2);
 			printf("}\n");
 			break;
@@ -93,35 +93,45 @@ void ASTprint(int level, ASTnode *p)
 			break;
 		case A_VARDEC:
 			printf("Variable ");
-			if ((p->operator) == A_Decaf_VOID)
-				printf("VOID ");
 			printf(" %s", p->name);
-			if (p->value > 0)
-				printf("[%d]", p->value);
+
+			if (p->S1 != NULL) {
+				printf("[ ");
+				printf("%d", p->S1->value);
+				printf(" ] ");
+			}
+			AST_Print_Type(p->A_Declared_Type);
+			printf(" ");
+			if (p->S1 == NULL) {
+				printf("= %d", p->value);
+			}
 			printf("\n");
-			ASTprint(level, p->S1);
+			// ASTprint(level, p->S1);
 			break;
 		case A_METHODDEC:
-			if (p->operator== A_Decaf_INT)
-				printf("INT ");
-			if (p->operator== A_Decaf_VOID)
-				printf("VOID ");
-			if (p->operator== A_Decaf_BOOL)
-				printf("BOOLEAN ");
-			printf("FUNCTION %s \n", p->name);
+			printf("Method '%s' with type ", p->name);
+			AST_Print_Type(p->A_Declared_Type);
 			/* print out the parameter list */
 			if (p->S1 == NULL) {
 				PT(level + 2);
-				printf(" (VOID) ");
+				printf(" (NONE) ");
 			} else {
 				PT(level + 2);
-				printf("( \n");
+				printf("( ");
 				ASTprint(level + 2, p->S1);
 				PT(level + 2);
-				printf(") ");
+				printf(" ) ");
 			}
 			printf("\n");
 			ASTprint(level + 2, p->S2); // print out the block
+			break;
+
+		case A_METHODID:
+			printf("Method Variable");
+			printf(" %s", p->name);
+			AST_Print_Type(p->A_Declared_Type);
+			// printf("\n");
+
 			break;
 		case A_PARAM:
 			printf("PARAMETER ");
@@ -131,9 +141,10 @@ void ASTprint(int level, ASTnode *p)
 				printf(" VOID ");
 			if (p->operator== A_Decaf_VOID)
 				printf(" BOOLEAN ");
-			printf(" %s", p->name);
+			printf("%s ", p->name);
 			if (p->value == -1)
 				printf("[]");
+			ASTprint(level + 2, p->S1);
 			printf("\n");
 			break;
 		case A_EXPR:
@@ -152,7 +163,7 @@ void ASTprint(int level, ASTnode *p)
 				ASTprint(level + 1, p->S2);
 			break;
 		case A_BLOCK:
-			printf("BLOCK STATEMENT %s \n", p->name);
+			printf("BLOCK STATEMENT \n");
 			ASTprint(level + 1, p->S1);
 			ASTprint(level + 1, p->S2);
 			break;
