@@ -2,15 +2,10 @@ Parsing completed
 EXTERN FUNC print_int 
  EXTERN Type:  INT 
 END EXTERN with Type:  INT 
-
 Package : foo 
- 
  Variable  x  with type  INT  = 3 
-
  Variable  Y  with type  BOOLEAN  = true 
-
  Variable  A [100] with type  INT 
- 
  METHOD FUNCTION foo  INT 
    ( 
    PARAMETER  INT  x

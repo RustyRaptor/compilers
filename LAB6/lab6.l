@@ -78,15 +78,13 @@ CHANGES:
 "bool"     {return(T_BOOLTYPE);}
 "break"    {return(T_BREAK);}
 "continue" {return(T_CONTINUE);}
-\.         {return(T_DOT);}
 "else"     {return(T_ELSE);}
 "=="       {return(T_EQ);}
 "extern"   {return(T_EXTERN);}
 "false"    {return(T_FALSE);}
-"for"      {return(T_FOR);}
 "func"     {return(T_FUNC);}
 ">="       {return(T_GEQ);}
-">"        {return(T_GT);}
+
 
 "if"       {if (mydebug) fprintf(stderr,"T_IF found\n");return(T_IF);}
 
@@ -99,7 +97,6 @@ CHANGES:
 "<<"       {return(T_LEFTSHIFT);}
 "<="       {return(T_LEQ);}
 "!="       {return(T_NEQ);}
-"null"     {return(T_NULL);}
 "||"       {return(T_OR);}
 "package"  {return(T_PACKAGE);}
 "return"   {return(T_RETURN);}
@@ -110,10 +107,6 @@ CHANGES:
 "void"     {if (mydebug) fprintf(stderr,"T_VOID found\n");return(T_VOID);}
 "while"    {return(T_WHILE);}
 
-\'.\' {
-        yylval.value=yytext[1];
-        return(T_CHARCONSTANT);
-}
 
 \".*\" {
         yylval.string=strdup(yytext);
@@ -145,7 +138,7 @@ CHANGES:
         if (mydebug) fprintf(stderr,"Whitespace found\n");
 }
 
-[\-+*/%();{},\[\]!<] {
+[\-+*/%();{},\[\]!<>] {
         if (mydebug) fprintf(stderr,"return a token %c\n",*yytext); 
         return (*yytext);
 }

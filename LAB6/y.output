@@ -1,12 +1,3 @@
-Terminals unused in grammar
-
-   T_CHARCONSTANT
-   T_DOT
-   T_FOR
-   T_NULL
-   T_STRINGCONSTANT
-
-
 Grammar
 
     0 $accept: Program $end
@@ -56,215 +47,232 @@ Grammar
    28 Statement: Block
    29          | Assign ';'
    30          | MethodCall ';'
-   31          | T_IF '(' Expr ')' Block T_ELSE Block
-   32          | T_IF '(' Expr ')' Block
-   33          | T_WHILE '(' Expr ')' Block
-   34          | T_RETURN ';'
-   35          | T_RETURN '(' ')' ';'
-   36          | T_RETURN '(' Expr ')' ';'
-   37          | T_BREAK ';'
-   38          | T_CONTINUE ';'
+   31          | IfStmt
+   32          | WhileStmt
+   33          | ReturnStmt
+   34          | BreakStmt
+   35          | ContinueStmt
 
-   39 Assign: Lvalue T_ASSIGN Expr
+   36 ContinueStmt: T_CONTINUE ';'
 
-   40 Lvalue: T_ID
-   41       | T_ID '[' Expr ']'
+   37 WhileStmt: T_WHILE '(' Expr ')' Block
 
-   42 MethodCall: T_ID '(' MethodArgs ')'
+   38 BreakStmt: T_BREAK ';'
 
-   43 MethodArg: Expr
+   39 IfStmt: T_IF '(' Expr ')' Block T_ELSE Block
+   40       | T_IF '(' Expr ')' Block
 
-   44 MethodArgs: %empty
-   45           | FullMethodArgs
+   41 ReturnStmt: T_RETURN ';'
+   42           | T_RETURN '(' ')' ';'
+   43           | T_RETURN '(' Expr ')' ';'
 
-   46 FullMethodArgs: MethodArg
-   47               | MethodArg ',' MethodArgs
+   44 Assign: Lvalue T_ASSIGN Expr
 
-   48 Expr: Simpleexpression
+   45 Lvalue: T_ID
+   46       | T_ID '[' Expr ']'
 
-   49 Simpleexpression: Additiveexpression
-   50                 | Simpleexpression Relop Additiveexpression
+   47 MethodCall: T_ID '(' MethodArgs ')'
 
-   51 Relop: T_LEQ
-   52      | '<'
-   53      | T_GT
-   54      | T_GEQ
-   55      | T_EQ
-   56      | T_NEQ
+   48 MethodArg: Expr
 
-   57 Additiveexpression: Term
-   58                   | Additiveexpression Addop Term
+   49 MethodArgs: %empty
+   50           | FullMethodArgs
 
-   59 Addop: '+'
-   60      | '-'
+   51 FullMethodArgs: MethodArg
+   52               | MethodArg ',' MethodArgs
 
-   61 Term: Factor
-   62     | Term Multop Factor
+   53 Expr: Simpleexpression
 
-   63 Multop: '*'
-   64       | '/'
-   65       | '%'
-   66       | T_AND
-   67       | T_OR
-   68       | T_LEFTSHIFT
-   69       | T_RIGHTSHIFT
+   54 Simpleexpression: Additiveexpression
+   55                 | Simpleexpression Relop Additiveexpression
 
-   70 Factor: T_ID
-   71       | MethodCall
-   72       | T_ID '[' Expr ']'
-   73       | Constant
-   74       | '(' Expr ')'
-   75       | '!' Factor
-   76       | '-' Factor
+   56 Relop: '<'
+   57      | '>'
+   58      | T_EQ
+   59      | T_LEQ
+   60      | T_GEQ
+   61      | T_NEQ
 
-   77 ExternType: T_STRINGTYPE
-   78           | Type
+   62 Additiveexpression: Term
+   63                   | Additiveexpression Addop Term
 
-   79 Type: T_INTTYPE
-   80     | T_BOOLTYPE
+   64 Addop: '+'
+   65      | '-'
 
-   81 MethodType: T_VOID
-   82           | Type
+   66 Term: Factor
+   67     | Term Multop Factor
 
-   83 BoolConstant: T_TRUE
-   84             | T_FALSE
+   68 Multop: '*'
+   69       | '/'
+   70       | '%'
+   71       | T_AND
+   72       | T_OR
+   73       | T_LEFTSHIFT
+   74       | T_RIGHTSHIFT
 
-   85 ArrayType: '[' T_INTCONSTANT ']' Type
+   75 Factor: T_ID
+   76       | MethodCall
+   77       | T_ID '[' Expr ']'
+   78       | Constant
+   79       | '(' Expr ')'
+   80       | '!' Factor
+   81       | T_STRINGCONSTANT
+   82       | '-' Factor
 
-   86 Constant: T_INTCONSTANT
-   87         | BoolConstant
+   83 ExternType: T_STRINGTYPE
+   84           | Type
+
+   85 Type: T_INTTYPE
+   86     | T_BOOLTYPE
+
+   87 MethodType: T_VOID
+   88           | Type
+
+   89 BoolConstant: T_TRUE
+   90             | T_FALSE
+
+   91 ArrayType: '[' T_INTCONSTANT ']' Type
+
+   92 Constant: T_INTCONSTANT
+   93         | BoolConstant
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'!' (33) 75
-'%' (37) 65
-'(' (40) 4 16 31 32 33 35 36 42 74
-')' (41) 4 16 31 32 33 35 36 42 74
-'*' (42) 63
-'+' (43) 59
-',' (44) 8 20 47
-'-' (45) 60 76
-'/' (47) 64
-';' (59) 4 11 12 13 24 25 29 30 34 35 36 37 38
-'<' (60) 52
-'[' (91) 41 72 85
-']' (93) 41 72 85
+'!' (33) 80
+'%' (37) 70
+'(' (40) 4 16 37 39 40 42 43 47 79
+')' (41) 4 16 37 39 40 42 43 47 79
+'*' (42) 68
+'+' (43) 64
+',' (44) 8 20 52
+'-' (45) 65 82
+'/' (47) 69
+';' (59) 4 11 12 13 24 25 29 30 36 38 41 42 43
+'<' (60) 56
+'>' (62) 57
+'[' (91) 46 77 91
+']' (93) 46 77 91
 '{' (123) 1 21
 '}' (125) 1 21
 error (256)
-T_AND (258) 66
-T_ASSIGN (259) 13 39
-T_BOOLTYPE (260) 80
-T_BREAK (261) 37
-T_CHARCONSTANT (262)
-T_CONTINUE (263) 38
-T_DOT (264)
-T_ELSE (265) 31
-T_EQ (266) 55
-T_EXTERN (267) 4
-T_FALSE (268) 84
-T_FOR (269)
-T_FUNC (270) 4 16
-T_GEQ (271) 54
-T_GT (272) 53
-T_ID (273) 1 4 11 12 13 16 19 20 24 25 40 41 42 70 72
-T_IF (274) 31 32
-T_INTCONSTANT (275) 85 86
-T_INTTYPE (276) 79
-T_LEFTSHIFT (277) 68
-T_LEQ (278) 51
-T_NEQ (279) 56
-T_NULL (280)
-T_OR (281) 67
-T_PACKAGE (282) 1
-T_RETURN (283) 34 35 36
-T_RIGHTSHIFT (284) 69
-T_STRINGCONSTANT (285)
-T_STRINGTYPE (286) 77
-T_TRUE (287) 83
-T_VAR (288) 11 12 13 24 25
-T_VOID (289) 81
-T_WHILE (290) 33
+T_AND (258) 71
+T_ASSIGN (259) 13 44
+T_BOOLTYPE (260) 86
+T_BREAK (261) 38
+T_CONTINUE (262) 36
+T_ELSE (263) 39
+T_EQ (264) 58
+T_EXTERN (265) 4
+T_FALSE (266) 90
+T_FUNC (267) 4 16
+T_GEQ (268) 60
+T_ID (269) 1 4 11 12 13 16 19 20 24 25 45 46 47 75 77
+T_IF (270) 39 40
+T_INTCONSTANT (271) 91 92
+T_INTTYPE (272) 85
+T_LEFTSHIFT (273) 73
+T_LEQ (274) 59
+T_NEQ (275) 61
+T_OR (276) 72
+T_PACKAGE (277) 1
+T_RETURN (278) 41 42 43
+T_RIGHTSHIFT (279) 74
+T_STRINGCONSTANT (280) 81
+T_STRINGTYPE (281) 83
+T_TRUE (282) 89
+T_VAR (283) 11 12 13 24 25
+T_VOID (284) 87
+T_WHILE (285) 37
 
 
 Nonterminals, with rules where they appear
 
-$accept (51)
+$accept (47)
     on left: 0
-Program (52)
+Program (48)
     on left: 1, on right: 0
-Externs (53)
+Externs (49)
     on left: 2 3, on right: 1 3
-ExternDefn (54)
+ExternDefn (50)
     on left: 4, on right: 3
-ExternParmList (55)
+ExternParmList (51)
     on left: 5 6, on right: 4 8
-FullExternParmList (56)
+FullExternParmList (52)
     on left: 7 8, on right: 6
-FieldDecls (57)
+FieldDecls (53)
     on left: 9 10, on right: 1 10
-FieldDecl (58)
+FieldDecl (54)
     on left: 11 12 13, on right: 10
-MethodDecls (59)
+MethodDecls (55)
     on left: 14 15, on right: 1 15
-MethodDecl (60)
+MethodDecl (56)
     on left: 16, on right: 15
-IdTypeList (61)
+IdTypeList (57)
     on left: 17 18, on right: 16 20
-IdTypeList1 (62)
+IdTypeList1 (58)
     on left: 19 20, on right: 18
-Block (63)
-    on left: 21, on right: 16 28 31 32 33
-VarDecls (64)
+Block (59)
+    on left: 21, on right: 16 28 37 39 40
+VarDecls (60)
     on left: 22 23, on right: 21 23
-VarDecl (65)
+VarDecl (61)
     on left: 24 25, on right: 23
-Statements (66)
+Statements (62)
     on left: 26 27, on right: 21 27
-Statement (67)
-    on left: 28 29 30 31 32 33 34 35 36 37 38, on right: 27
-Assign (68)
-    on left: 39, on right: 29
-Lvalue (69)
-    on left: 40 41, on right: 39
-MethodCall (70)
-    on left: 42, on right: 30 71
-MethodArg (71)
-    on left: 43, on right: 46 47
-MethodArgs (72)
-    on left: 44 45, on right: 42 47
-FullMethodArgs (73)
-    on left: 46 47, on right: 45
-Expr (74)
-    on left: 48, on right: 31 32 33 36 39 41 43 72 74
-Simpleexpression (75)
-    on left: 49 50, on right: 48 50
-Relop (76)
-    on left: 51 52 53 54 55 56, on right: 50
-Additiveexpression (77)
-    on left: 57 58, on right: 49 50 58
-Addop (78)
-    on left: 59 60, on right: 58
-Term (79)
-    on left: 61 62, on right: 57 58 62
-Multop (80)
-    on left: 63 64 65 66 67 68 69, on right: 62
-Factor (81)
-    on left: 70 71 72 73 74 75 76, on right: 61 62 75 76
-ExternType (82)
-    on left: 77 78, on right: 7 8
-Type (83)
-    on left: 79 80, on right: 11 13 19 20 24 78 82 85
-MethodType (84)
-    on left: 81 82, on right: 4 16
-BoolConstant (85)
-    on left: 83 84, on right: 87
-ArrayType (86)
-    on left: 85, on right: 12 25
-Constant (87)
-    on left: 86 87, on right: 13 73
+Statement (63)
+    on left: 28 29 30 31 32 33 34 35, on right: 27
+ContinueStmt (64)
+    on left: 36, on right: 35
+WhileStmt (65)
+    on left: 37, on right: 32
+BreakStmt (66)
+    on left: 38, on right: 34
+IfStmt (67)
+    on left: 39 40, on right: 31
+ReturnStmt (68)
+    on left: 41 42 43, on right: 33
+Assign (69)
+    on left: 44, on right: 29
+Lvalue (70)
+    on left: 45 46, on right: 44
+MethodCall (71)
+    on left: 47, on right: 30 76
+MethodArg (72)
+    on left: 48, on right: 51 52
+MethodArgs (73)
+    on left: 49 50, on right: 47 52
+FullMethodArgs (74)
+    on left: 51 52, on right: 50
+Expr (75)
+    on left: 53, on right: 37 39 40 43 44 46 48 77 79
+Simpleexpression (76)
+    on left: 54 55, on right: 53 55
+Relop (77)
+    on left: 56 57 58 59 60 61, on right: 55
+Additiveexpression (78)
+    on left: 62 63, on right: 54 55 63
+Addop (79)
+    on left: 64 65, on right: 63
+Term (80)
+    on left: 66 67, on right: 62 63 67
+Multop (81)
+    on left: 68 69 70 71 72 73 74, on right: 67
+Factor (82)
+    on left: 75 76 77 78 79 80 81 82, on right: 66 67 80 82
+ExternType (83)
+    on left: 83 84, on right: 7 8
+Type (84)
+    on left: 85 86, on right: 11 13 19 20 24 84 88 91
+MethodType (85)
+    on left: 87 88, on right: 4 16
+BoolConstant (86)
+    on left: 89 90, on right: 93
+ArrayType (87)
+    on left: 91, on right: 12 25
+Constant (88)
+    on left: 92 93, on right: 13 78
 
 
 State 0
@@ -385,23 +393,23 @@ State 12
 
 State 13
 
-   80 Type: T_BOOLTYPE .
+   86 Type: T_BOOLTYPE .
 
-    $default  reduce using rule 80 (Type)
+    $default  reduce using rule 86 (Type)
 
 
 State 14
 
-   79 Type: T_INTTYPE .
+   85 Type: T_INTTYPE .
 
-    $default  reduce using rule 79 (Type)
+    $default  reduce using rule 85 (Type)
 
 
 State 15
 
-   77 ExternType: T_STRINGTYPE .
+   83 ExternType: T_STRINGTYPE .
 
-    $default  reduce using rule 77 (ExternType)
+    $default  reduce using rule 83 (ExternType)
 
 
 State 16
@@ -430,9 +438,9 @@ State 18
 
 State 19
 
-   78 ExternType: Type .
+   84 ExternType: Type .
 
-    $default  reduce using rule 78 (ExternType)
+    $default  reduce using rule 84 (ExternType)
 
 
 State 20
@@ -545,16 +553,16 @@ State 29
 
 State 30
 
-   81 MethodType: T_VOID .
+   87 MethodType: T_VOID .
 
-    $default  reduce using rule 81 (MethodType)
+    $default  reduce using rule 87 (MethodType)
 
 
 State 31
 
-   82 MethodType: Type .
+   88 MethodType: Type .
 
-    $default  reduce using rule 82 (MethodType)
+    $default  reduce using rule 88 (MethodType)
 
 
 State 32
@@ -573,7 +581,7 @@ State 33
 
 State 34
 
-   85 ArrayType: '[' . T_INTCONSTANT ']' Type
+   91 ArrayType: '[' . T_INTCONSTANT ']' Type
 
     T_INTCONSTANT  shift, and go to state 41
 
@@ -624,7 +632,7 @@ State 40
 
 State 41
 
-   85 ArrayType: '[' T_INTCONSTANT . ']' Type
+   91 ArrayType: '[' T_INTCONSTANT . ']' Type
 
     ']'  shift, and go to state 46
 
@@ -669,7 +677,7 @@ State 45
 
 State 46
 
-   85 ArrayType: '[' T_INTCONSTANT ']' . Type
+   91 ArrayType: '[' T_INTCONSTANT ']' . Type
 
     T_BOOLTYPE  shift, and go to state 13
     T_INTTYPE   shift, and go to state 14
@@ -679,30 +687,30 @@ State 46
 
 State 47
 
-   84 BoolConstant: T_FALSE .
+   90 BoolConstant: T_FALSE .
 
-    $default  reduce using rule 84 (BoolConstant)
+    $default  reduce using rule 90 (BoolConstant)
 
 
 State 48
 
-   86 Constant: T_INTCONSTANT .
+   92 Constant: T_INTCONSTANT .
 
-    $default  reduce using rule 86 (Constant)
+    $default  reduce using rule 92 (Constant)
 
 
 State 49
 
-   83 BoolConstant: T_TRUE .
+   89 BoolConstant: T_TRUE .
 
-    $default  reduce using rule 83 (BoolConstant)
+    $default  reduce using rule 89 (BoolConstant)
 
 
 State 50
 
-   87 Constant: BoolConstant .
+   93 Constant: BoolConstant .
 
-    $default  reduce using rule 87 (Constant)
+    $default  reduce using rule 93 (Constant)
 
 
 State 51
@@ -739,9 +747,9 @@ State 54
 
 State 55
 
-   85 ArrayType: '[' T_INTCONSTANT ']' Type .
+   91 ArrayType: '[' T_INTCONSTANT ']' Type .
 
-    $default  reduce using rule 85 (ArrayType)
+    $default  reduce using rule 91 (ArrayType)
 
 
 State 56
@@ -842,12 +850,17 @@ State 65
 
     $default  reduce using rule 26 (Statements)
 
-    Block       go to state 74
-    Statements  go to state 75
-    Statement   go to state 76
-    Assign      go to state 77
-    Lvalue      go to state 78
-    MethodCall  go to state 79
+    Block         go to state 74
+    Statements    go to state 75
+    Statement     go to state 76
+    ContinueStmt  go to state 77
+    WhileStmt     go to state 78
+    BreakStmt     go to state 79
+    IfStmt        go to state 80
+    ReturnStmt    go to state 81
+    Assign        go to state 82
+    Lvalue        go to state 83
+    MethodCall    go to state 84
 
 
 State 66
@@ -858,7 +871,7 @@ State 66
 
     $default  reduce using rule 22 (VarDecls)
 
-    VarDecls  go to state 80
+    VarDecls  go to state 85
     VarDecl   go to state 66
 
 
@@ -871,59 +884,59 @@ State 67
     T_INTTYPE   shift, and go to state 14
     '['         shift, and go to state 34
 
-    Type       go to state 81
-    ArrayType  go to state 82
+    Type       go to state 86
+    ArrayType  go to state 87
 
 
 State 68
 
-   37 Statement: T_BREAK . ';'
+   38 BreakStmt: T_BREAK . ';'
 
-    ';'  shift, and go to state 83
+    ';'  shift, and go to state 88
 
 
 State 69
 
-   38 Statement: T_CONTINUE . ';'
+   36 ContinueStmt: T_CONTINUE . ';'
 
-    ';'  shift, and go to state 84
+    ';'  shift, and go to state 89
 
 
 State 70
 
-   40 Lvalue: T_ID .
-   41       | T_ID . '[' Expr ']'
-   42 MethodCall: T_ID . '(' MethodArgs ')'
+   45 Lvalue: T_ID .
+   46       | T_ID . '[' Expr ']'
+   47 MethodCall: T_ID . '(' MethodArgs ')'
 
-    '('  shift, and go to state 85
-    '['  shift, and go to state 86
+    '('  shift, and go to state 90
+    '['  shift, and go to state 91
 
-    $default  reduce using rule 40 (Lvalue)
+    $default  reduce using rule 45 (Lvalue)
 
 
 State 71
 
-   31 Statement: T_IF . '(' Expr ')' Block T_ELSE Block
-   32          | T_IF . '(' Expr ')' Block
+   39 IfStmt: T_IF . '(' Expr ')' Block T_ELSE Block
+   40       | T_IF . '(' Expr ')' Block
 
-    '('  shift, and go to state 87
+    '('  shift, and go to state 92
 
 
 State 72
 
-   34 Statement: T_RETURN . ';'
-   35          | T_RETURN . '(' ')' ';'
-   36          | T_RETURN . '(' Expr ')' ';'
+   41 ReturnStmt: T_RETURN . ';'
+   42           | T_RETURN . '(' ')' ';'
+   43           | T_RETURN . '(' Expr ')' ';'
 
-    '('  shift, and go to state 88
-    ';'  shift, and go to state 89
+    '('  shift, and go to state 93
+    ';'  shift, and go to state 94
 
 
 State 73
 
-   33 Statement: T_WHILE . '(' Expr ')' Block
+   37 WhileStmt: T_WHILE . '(' Expr ')' Block
 
-    '('  shift, and go to state 90
+    '('  shift, and go to state 95
 
 
 State 74
@@ -937,7 +950,7 @@ State 75
 
    21 Block: '{' VarDecls Statements . '}'
 
-    '}'  shift, and go to state 91
+    '}'  shift, and go to state 96
 
 
 State 76
@@ -954,852 +967,913 @@ State 76
 
     $default  reduce using rule 26 (Statements)
 
-    Block       go to state 74
-    Statements  go to state 92
-    Statement   go to state 76
-    Assign      go to state 77
-    Lvalue      go to state 78
-    MethodCall  go to state 79
+    Block         go to state 74
+    Statements    go to state 97
+    Statement     go to state 76
+    ContinueStmt  go to state 77
+    WhileStmt     go to state 78
+    BreakStmt     go to state 79
+    IfStmt        go to state 80
+    ReturnStmt    go to state 81
+    Assign        go to state 82
+    Lvalue        go to state 83
+    MethodCall    go to state 84
 
 
 State 77
 
-   29 Statement: Assign . ';'
+   35 Statement: ContinueStmt .
 
-    ';'  shift, and go to state 93
+    $default  reduce using rule 35 (Statement)
 
 
 State 78
 
-   39 Assign: Lvalue . T_ASSIGN Expr
+   32 Statement: WhileStmt .
 
-    T_ASSIGN  shift, and go to state 94
+    $default  reduce using rule 32 (Statement)
 
 
 State 79
 
-   30 Statement: MethodCall . ';'
+   34 Statement: BreakStmt .
 
-    ';'  shift, and go to state 95
+    $default  reduce using rule 34 (Statement)
 
 
 State 80
+
+   31 Statement: IfStmt .
+
+    $default  reduce using rule 31 (Statement)
+
+
+State 81
+
+   33 Statement: ReturnStmt .
+
+    $default  reduce using rule 33 (Statement)
+
+
+State 82
+
+   29 Statement: Assign . ';'
+
+    ';'  shift, and go to state 98
+
+
+State 83
+
+   44 Assign: Lvalue . T_ASSIGN Expr
+
+    T_ASSIGN  shift, and go to state 99
+
+
+State 84
+
+   30 Statement: MethodCall . ';'
+
+    ';'  shift, and go to state 100
+
+
+State 85
 
    23 VarDecls: VarDecl VarDecls .
 
     $default  reduce using rule 23 (VarDecls)
 
 
-State 81
+State 86
 
    24 VarDecl: T_VAR T_ID Type . ';'
 
-    ';'  shift, and go to state 96
-
-
-State 82
-
-   25 VarDecl: T_VAR T_ID ArrayType . ';'
-
-    ';'  shift, and go to state 97
-
-
-State 83
-
-   37 Statement: T_BREAK ';' .
-
-    $default  reduce using rule 37 (Statement)
-
-
-State 84
-
-   38 Statement: T_CONTINUE ';' .
-
-    $default  reduce using rule 38 (Statement)
-
-
-State 85
-
-   42 MethodCall: T_ID '(' . MethodArgs ')'
-
-    T_FALSE        shift, and go to state 47
-    T_ID           shift, and go to state 98
-    T_INTCONSTANT  shift, and go to state 48
-    T_TRUE         shift, and go to state 49
-    '('            shift, and go to state 99
-    '-'            shift, and go to state 100
-    '!'            shift, and go to state 101
-
-    $default  reduce using rule 44 (MethodArgs)
-
-    MethodCall          go to state 102
-    MethodArg           go to state 103
-    MethodArgs          go to state 104
-    FullMethodArgs      go to state 105
-    Expr                go to state 106
-    Simpleexpression    go to state 107
-    Additiveexpression  go to state 108
-    Term                go to state 109
-    Factor              go to state 110
-    BoolConstant        go to state 50
-    Constant            go to state 111
-
-
-State 86
-
-   41 Lvalue: T_ID '[' . Expr ']'
-
-    T_FALSE        shift, and go to state 47
-    T_ID           shift, and go to state 98
-    T_INTCONSTANT  shift, and go to state 48
-    T_TRUE         shift, and go to state 49
-    '('            shift, and go to state 99
-    '-'            shift, and go to state 100
-    '!'            shift, and go to state 101
-
-    MethodCall          go to state 102
-    Expr                go to state 112
-    Simpleexpression    go to state 107
-    Additiveexpression  go to state 108
-    Term                go to state 109
-    Factor              go to state 110
-    BoolConstant        go to state 50
-    Constant            go to state 111
+    ';'  shift, and go to state 101
 
 
 State 87
 
-   31 Statement: T_IF '(' . Expr ')' Block T_ELSE Block
-   32          | T_IF '(' . Expr ')' Block
+   25 VarDecl: T_VAR T_ID ArrayType . ';'
 
-    T_FALSE        shift, and go to state 47
-    T_ID           shift, and go to state 98
-    T_INTCONSTANT  shift, and go to state 48
-    T_TRUE         shift, and go to state 49
-    '('            shift, and go to state 99
-    '-'            shift, and go to state 100
-    '!'            shift, and go to state 101
-
-    MethodCall          go to state 102
-    Expr                go to state 113
-    Simpleexpression    go to state 107
-    Additiveexpression  go to state 108
-    Term                go to state 109
-    Factor              go to state 110
-    BoolConstant        go to state 50
-    Constant            go to state 111
+    ';'  shift, and go to state 102
 
 
 State 88
 
-   35 Statement: T_RETURN '(' . ')' ';'
-   36          | T_RETURN '(' . Expr ')' ';'
+   38 BreakStmt: T_BREAK ';' .
 
-    T_FALSE        shift, and go to state 47
-    T_ID           shift, and go to state 98
-    T_INTCONSTANT  shift, and go to state 48
-    T_TRUE         shift, and go to state 49
-    '('            shift, and go to state 99
-    ')'            shift, and go to state 114
-    '-'            shift, and go to state 100
-    '!'            shift, and go to state 101
-
-    MethodCall          go to state 102
-    Expr                go to state 115
-    Simpleexpression    go to state 107
-    Additiveexpression  go to state 108
-    Term                go to state 109
-    Factor              go to state 110
-    BoolConstant        go to state 50
-    Constant            go to state 111
+    $default  reduce using rule 38 (BreakStmt)
 
 
 State 89
 
-   34 Statement: T_RETURN ';' .
+   36 ContinueStmt: T_CONTINUE ';' .
 
-    $default  reduce using rule 34 (Statement)
+    $default  reduce using rule 36 (ContinueStmt)
 
 
 State 90
 
-   33 Statement: T_WHILE '(' . Expr ')' Block
+   47 MethodCall: T_ID '(' . MethodArgs ')'
 
-    T_FALSE        shift, and go to state 47
-    T_ID           shift, and go to state 98
-    T_INTCONSTANT  shift, and go to state 48
-    T_TRUE         shift, and go to state 49
-    '('            shift, and go to state 99
-    '-'            shift, and go to state 100
-    '!'            shift, and go to state 101
+    T_FALSE           shift, and go to state 47
+    T_ID              shift, and go to state 103
+    T_INTCONSTANT     shift, and go to state 48
+    T_STRINGCONSTANT  shift, and go to state 104
+    T_TRUE            shift, and go to state 49
+    '('               shift, and go to state 105
+    '-'               shift, and go to state 106
+    '!'               shift, and go to state 107
 
-    MethodCall          go to state 102
-    Expr                go to state 116
-    Simpleexpression    go to state 107
-    Additiveexpression  go to state 108
-    Term                go to state 109
-    Factor              go to state 110
+    $default  reduce using rule 49 (MethodArgs)
+
+    MethodCall          go to state 108
+    MethodArg           go to state 109
+    MethodArgs          go to state 110
+    FullMethodArgs      go to state 111
+    Expr                go to state 112
+    Simpleexpression    go to state 113
+    Additiveexpression  go to state 114
+    Term                go to state 115
+    Factor              go to state 116
     BoolConstant        go to state 50
-    Constant            go to state 111
+    Constant            go to state 117
 
 
 State 91
+
+   46 Lvalue: T_ID '[' . Expr ']'
+
+    T_FALSE           shift, and go to state 47
+    T_ID              shift, and go to state 103
+    T_INTCONSTANT     shift, and go to state 48
+    T_STRINGCONSTANT  shift, and go to state 104
+    T_TRUE            shift, and go to state 49
+    '('               shift, and go to state 105
+    '-'               shift, and go to state 106
+    '!'               shift, and go to state 107
+
+    MethodCall          go to state 108
+    Expr                go to state 118
+    Simpleexpression    go to state 113
+    Additiveexpression  go to state 114
+    Term                go to state 115
+    Factor              go to state 116
+    BoolConstant        go to state 50
+    Constant            go to state 117
+
+
+State 92
+
+   39 IfStmt: T_IF '(' . Expr ')' Block T_ELSE Block
+   40       | T_IF '(' . Expr ')' Block
+
+    T_FALSE           shift, and go to state 47
+    T_ID              shift, and go to state 103
+    T_INTCONSTANT     shift, and go to state 48
+    T_STRINGCONSTANT  shift, and go to state 104
+    T_TRUE            shift, and go to state 49
+    '('               shift, and go to state 105
+    '-'               shift, and go to state 106
+    '!'               shift, and go to state 107
+
+    MethodCall          go to state 108
+    Expr                go to state 119
+    Simpleexpression    go to state 113
+    Additiveexpression  go to state 114
+    Term                go to state 115
+    Factor              go to state 116
+    BoolConstant        go to state 50
+    Constant            go to state 117
+
+
+State 93
+
+   42 ReturnStmt: T_RETURN '(' . ')' ';'
+   43           | T_RETURN '(' . Expr ')' ';'
+
+    T_FALSE           shift, and go to state 47
+    T_ID              shift, and go to state 103
+    T_INTCONSTANT     shift, and go to state 48
+    T_STRINGCONSTANT  shift, and go to state 104
+    T_TRUE            shift, and go to state 49
+    '('               shift, and go to state 105
+    ')'               shift, and go to state 120
+    '-'               shift, and go to state 106
+    '!'               shift, and go to state 107
+
+    MethodCall          go to state 108
+    Expr                go to state 121
+    Simpleexpression    go to state 113
+    Additiveexpression  go to state 114
+    Term                go to state 115
+    Factor              go to state 116
+    BoolConstant        go to state 50
+    Constant            go to state 117
+
+
+State 94
+
+   41 ReturnStmt: T_RETURN ';' .
+
+    $default  reduce using rule 41 (ReturnStmt)
+
+
+State 95
+
+   37 WhileStmt: T_WHILE '(' . Expr ')' Block
+
+    T_FALSE           shift, and go to state 47
+    T_ID              shift, and go to state 103
+    T_INTCONSTANT     shift, and go to state 48
+    T_STRINGCONSTANT  shift, and go to state 104
+    T_TRUE            shift, and go to state 49
+    '('               shift, and go to state 105
+    '-'               shift, and go to state 106
+    '!'               shift, and go to state 107
+
+    MethodCall          go to state 108
+    Expr                go to state 122
+    Simpleexpression    go to state 113
+    Additiveexpression  go to state 114
+    Term                go to state 115
+    Factor              go to state 116
+    BoolConstant        go to state 50
+    Constant            go to state 117
+
+
+State 96
 
    21 Block: '{' VarDecls Statements '}' .
 
     $default  reduce using rule 21 (Block)
 
 
-State 92
+State 97
 
    27 Statements: Statement Statements .
 
     $default  reduce using rule 27 (Statements)
 
 
-State 93
+State 98
 
    29 Statement: Assign ';' .
 
     $default  reduce using rule 29 (Statement)
 
 
-State 94
+State 99
 
-   39 Assign: Lvalue T_ASSIGN . Expr
+   44 Assign: Lvalue T_ASSIGN . Expr
 
-    T_FALSE        shift, and go to state 47
-    T_ID           shift, and go to state 98
-    T_INTCONSTANT  shift, and go to state 48
-    T_TRUE         shift, and go to state 49
-    '('            shift, and go to state 99
-    '-'            shift, and go to state 100
-    '!'            shift, and go to state 101
+    T_FALSE           shift, and go to state 47
+    T_ID              shift, and go to state 103
+    T_INTCONSTANT     shift, and go to state 48
+    T_STRINGCONSTANT  shift, and go to state 104
+    T_TRUE            shift, and go to state 49
+    '('               shift, and go to state 105
+    '-'               shift, and go to state 106
+    '!'               shift, and go to state 107
 
-    MethodCall          go to state 102
-    Expr                go to state 117
-    Simpleexpression    go to state 107
-    Additiveexpression  go to state 108
-    Term                go to state 109
-    Factor              go to state 110
+    MethodCall          go to state 108
+    Expr                go to state 123
+    Simpleexpression    go to state 113
+    Additiveexpression  go to state 114
+    Term                go to state 115
+    Factor              go to state 116
     BoolConstant        go to state 50
-    Constant            go to state 111
+    Constant            go to state 117
 
 
-State 95
+State 100
 
    30 Statement: MethodCall ';' .
 
     $default  reduce using rule 30 (Statement)
 
 
-State 96
+State 101
 
    24 VarDecl: T_VAR T_ID Type ';' .
 
     $default  reduce using rule 24 (VarDecl)
 
 
-State 97
+State 102
 
    25 VarDecl: T_VAR T_ID ArrayType ';' .
 
     $default  reduce using rule 25 (VarDecl)
 
 
-State 98
-
-   42 MethodCall: T_ID . '(' MethodArgs ')'
-   70 Factor: T_ID .
-   72       | T_ID . '[' Expr ']'
-
-    '('  shift, and go to state 85
-    '['  shift, and go to state 118
-
-    $default  reduce using rule 70 (Factor)
-
-
-State 99
-
-   74 Factor: '(' . Expr ')'
-
-    T_FALSE        shift, and go to state 47
-    T_ID           shift, and go to state 98
-    T_INTCONSTANT  shift, and go to state 48
-    T_TRUE         shift, and go to state 49
-    '('            shift, and go to state 99
-    '-'            shift, and go to state 100
-    '!'            shift, and go to state 101
-
-    MethodCall          go to state 102
-    Expr                go to state 119
-    Simpleexpression    go to state 107
-    Additiveexpression  go to state 108
-    Term                go to state 109
-    Factor              go to state 110
-    BoolConstant        go to state 50
-    Constant            go to state 111
-
-
-State 100
-
-   76 Factor: '-' . Factor
-
-    T_FALSE        shift, and go to state 47
-    T_ID           shift, and go to state 98
-    T_INTCONSTANT  shift, and go to state 48
-    T_TRUE         shift, and go to state 49
-    '('            shift, and go to state 99
-    '-'            shift, and go to state 100
-    '!'            shift, and go to state 101
-
-    MethodCall    go to state 102
-    Factor        go to state 120
-    BoolConstant  go to state 50
-    Constant      go to state 111
-
-
-State 101
-
-   75 Factor: '!' . Factor
-
-    T_FALSE        shift, and go to state 47
-    T_ID           shift, and go to state 98
-    T_INTCONSTANT  shift, and go to state 48
-    T_TRUE         shift, and go to state 49
-    '('            shift, and go to state 99
-    '-'            shift, and go to state 100
-    '!'            shift, and go to state 101
-
-    MethodCall    go to state 102
-    Factor        go to state 121
-    BoolConstant  go to state 50
-    Constant      go to state 111
-
-
-State 102
-
-   71 Factor: MethodCall .
-
-    $default  reduce using rule 71 (Factor)
-
-
 State 103
 
-   46 FullMethodArgs: MethodArg .
-   47               | MethodArg . ',' MethodArgs
-
-    ','  shift, and go to state 122
-
-    $default  reduce using rule 46 (FullMethodArgs)
-
-
-State 104
-
-   42 MethodCall: T_ID '(' MethodArgs . ')'
-
-    ')'  shift, and go to state 123
-
-
-State 105
-
-   45 MethodArgs: FullMethodArgs .
-
-    $default  reduce using rule 45 (MethodArgs)
-
-
-State 106
-
-   43 MethodArg: Expr .
-
-    $default  reduce using rule 43 (MethodArg)
-
-
-State 107
-
-   48 Expr: Simpleexpression .
-   50 Simpleexpression: Simpleexpression . Relop Additiveexpression
-
-    T_EQ   shift, and go to state 124
-    T_GEQ  shift, and go to state 125
-    T_GT   shift, and go to state 126
-    T_LEQ  shift, and go to state 127
-    T_NEQ  shift, and go to state 128
-    '<'    shift, and go to state 129
-
-    $default  reduce using rule 48 (Expr)
-
-    Relop  go to state 130
-
-
-State 108
-
-   49 Simpleexpression: Additiveexpression .
-   58 Additiveexpression: Additiveexpression . Addop Term
-
-    '+'  shift, and go to state 131
-    '-'  shift, and go to state 132
-
-    $default  reduce using rule 49 (Simpleexpression)
-
-    Addop  go to state 133
-
-
-State 109
-
-   57 Additiveexpression: Term .
-   62 Term: Term . Multop Factor
-
-    T_AND         shift, and go to state 134
-    T_LEFTSHIFT   shift, and go to state 135
-    T_OR          shift, and go to state 136
-    T_RIGHTSHIFT  shift, and go to state 137
-    '*'           shift, and go to state 138
-    '/'           shift, and go to state 139
-    '%'           shift, and go to state 140
-
-    $default  reduce using rule 57 (Additiveexpression)
-
-    Multop  go to state 141
-
-
-State 110
-
-   61 Term: Factor .
-
-    $default  reduce using rule 61 (Term)
-
-
-State 111
-
-   73 Factor: Constant .
-
-    $default  reduce using rule 73 (Factor)
-
-
-State 112
-
-   41 Lvalue: T_ID '[' Expr . ']'
-
-    ']'  shift, and go to state 142
-
-
-State 113
-
-   31 Statement: T_IF '(' Expr . ')' Block T_ELSE Block
-   32          | T_IF '(' Expr . ')' Block
-
-    ')'  shift, and go to state 143
-
-
-State 114
-
-   35 Statement: T_RETURN '(' ')' . ';'
-
-    ';'  shift, and go to state 144
-
-
-State 115
-
-   36 Statement: T_RETURN '(' Expr . ')' ';'
-
-    ')'  shift, and go to state 145
-
-
-State 116
-
-   33 Statement: T_WHILE '(' Expr . ')' Block
-
-    ')'  shift, and go to state 146
-
-
-State 117
-
-   39 Assign: Lvalue T_ASSIGN Expr .
-
-    $default  reduce using rule 39 (Assign)
-
-
-State 118
-
-   72 Factor: T_ID '[' . Expr ']'
-
-    T_FALSE        shift, and go to state 47
-    T_ID           shift, and go to state 98
-    T_INTCONSTANT  shift, and go to state 48
-    T_TRUE         shift, and go to state 49
-    '('            shift, and go to state 99
-    '-'            shift, and go to state 100
-    '!'            shift, and go to state 101
-
-    MethodCall          go to state 102
-    Expr                go to state 147
-    Simpleexpression    go to state 107
-    Additiveexpression  go to state 108
-    Term                go to state 109
-    Factor              go to state 110
-    BoolConstant        go to state 50
-    Constant            go to state 111
-
-
-State 119
-
-   74 Factor: '(' Expr . ')'
-
-    ')'  shift, and go to state 148
-
-
-State 120
-
-   76 Factor: '-' Factor .
-
-    $default  reduce using rule 76 (Factor)
-
-
-State 121
-
-   75 Factor: '!' Factor .
+   47 MethodCall: T_ID . '(' MethodArgs ')'
+   75 Factor: T_ID .
+   77       | T_ID . '[' Expr ']'
+
+    '('  shift, and go to state 90
+    '['  shift, and go to state 124
 
     $default  reduce using rule 75 (Factor)
 
 
+State 104
+
+   81 Factor: T_STRINGCONSTANT .
+
+    $default  reduce using rule 81 (Factor)
+
+
+State 105
+
+   79 Factor: '(' . Expr ')'
+
+    T_FALSE           shift, and go to state 47
+    T_ID              shift, and go to state 103
+    T_INTCONSTANT     shift, and go to state 48
+    T_STRINGCONSTANT  shift, and go to state 104
+    T_TRUE            shift, and go to state 49
+    '('               shift, and go to state 105
+    '-'               shift, and go to state 106
+    '!'               shift, and go to state 107
+
+    MethodCall          go to state 108
+    Expr                go to state 125
+    Simpleexpression    go to state 113
+    Additiveexpression  go to state 114
+    Term                go to state 115
+    Factor              go to state 116
+    BoolConstant        go to state 50
+    Constant            go to state 117
+
+
+State 106
+
+   82 Factor: '-' . Factor
+
+    T_FALSE           shift, and go to state 47
+    T_ID              shift, and go to state 103
+    T_INTCONSTANT     shift, and go to state 48
+    T_STRINGCONSTANT  shift, and go to state 104
+    T_TRUE            shift, and go to state 49
+    '('               shift, and go to state 105
+    '-'               shift, and go to state 106
+    '!'               shift, and go to state 107
+
+    MethodCall    go to state 108
+    Factor        go to state 126
+    BoolConstant  go to state 50
+    Constant      go to state 117
+
+
+State 107
+
+   80 Factor: '!' . Factor
+
+    T_FALSE           shift, and go to state 47
+    T_ID              shift, and go to state 103
+    T_INTCONSTANT     shift, and go to state 48
+    T_STRINGCONSTANT  shift, and go to state 104
+    T_TRUE            shift, and go to state 49
+    '('               shift, and go to state 105
+    '-'               shift, and go to state 106
+    '!'               shift, and go to state 107
+
+    MethodCall    go to state 108
+    Factor        go to state 127
+    BoolConstant  go to state 50
+    Constant      go to state 117
+
+
+State 108
+
+   76 Factor: MethodCall .
+
+    $default  reduce using rule 76 (Factor)
+
+
+State 109
+
+   51 FullMethodArgs: MethodArg .
+   52               | MethodArg . ',' MethodArgs
+
+    ','  shift, and go to state 128
+
+    $default  reduce using rule 51 (FullMethodArgs)
+
+
+State 110
+
+   47 MethodCall: T_ID '(' MethodArgs . ')'
+
+    ')'  shift, and go to state 129
+
+
+State 111
+
+   50 MethodArgs: FullMethodArgs .
+
+    $default  reduce using rule 50 (MethodArgs)
+
+
+State 112
+
+   48 MethodArg: Expr .
+
+    $default  reduce using rule 48 (MethodArg)
+
+
+State 113
+
+   53 Expr: Simpleexpression .
+   55 Simpleexpression: Simpleexpression . Relop Additiveexpression
+
+    T_EQ   shift, and go to state 130
+    T_GEQ  shift, and go to state 131
+    T_LEQ  shift, and go to state 132
+    T_NEQ  shift, and go to state 133
+    '<'    shift, and go to state 134
+    '>'    shift, and go to state 135
+
+    $default  reduce using rule 53 (Expr)
+
+    Relop  go to state 136
+
+
+State 114
+
+   54 Simpleexpression: Additiveexpression .
+   63 Additiveexpression: Additiveexpression . Addop Term
+
+    '+'  shift, and go to state 137
+    '-'  shift, and go to state 138
+
+    $default  reduce using rule 54 (Simpleexpression)
+
+    Addop  go to state 139
+
+
+State 115
+
+   62 Additiveexpression: Term .
+   67 Term: Term . Multop Factor
+
+    T_AND         shift, and go to state 140
+    T_LEFTSHIFT   shift, and go to state 141
+    T_OR          shift, and go to state 142
+    T_RIGHTSHIFT  shift, and go to state 143
+    '*'           shift, and go to state 144
+    '/'           shift, and go to state 145
+    '%'           shift, and go to state 146
+
+    $default  reduce using rule 62 (Additiveexpression)
+
+    Multop  go to state 147
+
+
+State 116
+
+   66 Term: Factor .
+
+    $default  reduce using rule 66 (Term)
+
+
+State 117
+
+   78 Factor: Constant .
+
+    $default  reduce using rule 78 (Factor)
+
+
+State 118
+
+   46 Lvalue: T_ID '[' Expr . ']'
+
+    ']'  shift, and go to state 148
+
+
+State 119
+
+   39 IfStmt: T_IF '(' Expr . ')' Block T_ELSE Block
+   40       | T_IF '(' Expr . ')' Block
+
+    ')'  shift, and go to state 149
+
+
+State 120
+
+   42 ReturnStmt: T_RETURN '(' ')' . ';'
+
+    ';'  shift, and go to state 150
+
+
+State 121
+
+   43 ReturnStmt: T_RETURN '(' Expr . ')' ';'
+
+    ')'  shift, and go to state 151
+
+
 State 122
 
-   47 FullMethodArgs: MethodArg ',' . MethodArgs
+   37 WhileStmt: T_WHILE '(' Expr . ')' Block
 
-    T_FALSE        shift, and go to state 47
-    T_ID           shift, and go to state 98
-    T_INTCONSTANT  shift, and go to state 48
-    T_TRUE         shift, and go to state 49
-    '('            shift, and go to state 99
-    '-'            shift, and go to state 100
-    '!'            shift, and go to state 101
-
-    $default  reduce using rule 44 (MethodArgs)
-
-    MethodCall          go to state 102
-    MethodArg           go to state 103
-    MethodArgs          go to state 149
-    FullMethodArgs      go to state 105
-    Expr                go to state 106
-    Simpleexpression    go to state 107
-    Additiveexpression  go to state 108
-    Term                go to state 109
-    Factor              go to state 110
-    BoolConstant        go to state 50
-    Constant            go to state 111
+    ')'  shift, and go to state 152
 
 
 State 123
 
-   42 MethodCall: T_ID '(' MethodArgs ')' .
+   44 Assign: Lvalue T_ASSIGN Expr .
 
-    $default  reduce using rule 42 (MethodCall)
+    $default  reduce using rule 44 (Assign)
 
 
 State 124
 
-   55 Relop: T_EQ .
+   77 Factor: T_ID '[' . Expr ']'
 
-    $default  reduce using rule 55 (Relop)
+    T_FALSE           shift, and go to state 47
+    T_ID              shift, and go to state 103
+    T_INTCONSTANT     shift, and go to state 48
+    T_STRINGCONSTANT  shift, and go to state 104
+    T_TRUE            shift, and go to state 49
+    '('               shift, and go to state 105
+    '-'               shift, and go to state 106
+    '!'               shift, and go to state 107
+
+    MethodCall          go to state 108
+    Expr                go to state 153
+    Simpleexpression    go to state 113
+    Additiveexpression  go to state 114
+    Term                go to state 115
+    Factor              go to state 116
+    BoolConstant        go to state 50
+    Constant            go to state 117
 
 
 State 125
 
-   54 Relop: T_GEQ .
+   79 Factor: '(' Expr . ')'
 
-    $default  reduce using rule 54 (Relop)
+    ')'  shift, and go to state 154
 
 
 State 126
 
-   53 Relop: T_GT .
+   82 Factor: '-' Factor .
 
-    $default  reduce using rule 53 (Relop)
+    $default  reduce using rule 82 (Factor)
 
 
 State 127
 
-   51 Relop: T_LEQ .
+   80 Factor: '!' Factor .
 
-    $default  reduce using rule 51 (Relop)
+    $default  reduce using rule 80 (Factor)
 
 
 State 128
 
-   56 Relop: T_NEQ .
+   52 FullMethodArgs: MethodArg ',' . MethodArgs
 
-    $default  reduce using rule 56 (Relop)
+    T_FALSE           shift, and go to state 47
+    T_ID              shift, and go to state 103
+    T_INTCONSTANT     shift, and go to state 48
+    T_STRINGCONSTANT  shift, and go to state 104
+    T_TRUE            shift, and go to state 49
+    '('               shift, and go to state 105
+    '-'               shift, and go to state 106
+    '!'               shift, and go to state 107
+
+    $default  reduce using rule 49 (MethodArgs)
+
+    MethodCall          go to state 108
+    MethodArg           go to state 109
+    MethodArgs          go to state 155
+    FullMethodArgs      go to state 111
+    Expr                go to state 112
+    Simpleexpression    go to state 113
+    Additiveexpression  go to state 114
+    Term                go to state 115
+    Factor              go to state 116
+    BoolConstant        go to state 50
+    Constant            go to state 117
 
 
 State 129
 
-   52 Relop: '<' .
+   47 MethodCall: T_ID '(' MethodArgs ')' .
 
-    $default  reduce using rule 52 (Relop)
+    $default  reduce using rule 47 (MethodCall)
 
 
 State 130
 
-   50 Simpleexpression: Simpleexpression Relop . Additiveexpression
+   58 Relop: T_EQ .
 
-    T_FALSE        shift, and go to state 47
-    T_ID           shift, and go to state 98
-    T_INTCONSTANT  shift, and go to state 48
-    T_TRUE         shift, and go to state 49
-    '('            shift, and go to state 99
-    '-'            shift, and go to state 100
-    '!'            shift, and go to state 101
-
-    MethodCall          go to state 102
-    Additiveexpression  go to state 150
-    Term                go to state 109
-    Factor              go to state 110
-    BoolConstant        go to state 50
-    Constant            go to state 111
+    $default  reduce using rule 58 (Relop)
 
 
 State 131
 
-   59 Addop: '+' .
+   60 Relop: T_GEQ .
 
-    $default  reduce using rule 59 (Addop)
+    $default  reduce using rule 60 (Relop)
 
 
 State 132
 
-   60 Addop: '-' .
+   59 Relop: T_LEQ .
 
-    $default  reduce using rule 60 (Addop)
+    $default  reduce using rule 59 (Relop)
 
 
 State 133
 
-   58 Additiveexpression: Additiveexpression Addop . Term
+   61 Relop: T_NEQ .
 
-    T_FALSE        shift, and go to state 47
-    T_ID           shift, and go to state 98
-    T_INTCONSTANT  shift, and go to state 48
-    T_TRUE         shift, and go to state 49
-    '('            shift, and go to state 99
-    '-'            shift, and go to state 100
-    '!'            shift, and go to state 101
-
-    MethodCall    go to state 102
-    Term          go to state 151
-    Factor        go to state 110
-    BoolConstant  go to state 50
-    Constant      go to state 111
+    $default  reduce using rule 61 (Relop)
 
 
 State 134
 
-   66 Multop: T_AND .
+   56 Relop: '<' .
 
-    $default  reduce using rule 66 (Multop)
+    $default  reduce using rule 56 (Relop)
 
 
 State 135
 
-   68 Multop: T_LEFTSHIFT .
+   57 Relop: '>' .
 
-    $default  reduce using rule 68 (Multop)
+    $default  reduce using rule 57 (Relop)
 
 
 State 136
 
-   67 Multop: T_OR .
+   55 Simpleexpression: Simpleexpression Relop . Additiveexpression
 
-    $default  reduce using rule 67 (Multop)
+    T_FALSE           shift, and go to state 47
+    T_ID              shift, and go to state 103
+    T_INTCONSTANT     shift, and go to state 48
+    T_STRINGCONSTANT  shift, and go to state 104
+    T_TRUE            shift, and go to state 49
+    '('               shift, and go to state 105
+    '-'               shift, and go to state 106
+    '!'               shift, and go to state 107
+
+    MethodCall          go to state 108
+    Additiveexpression  go to state 156
+    Term                go to state 115
+    Factor              go to state 116
+    BoolConstant        go to state 50
+    Constant            go to state 117
 
 
 State 137
 
-   69 Multop: T_RIGHTSHIFT .
+   64 Addop: '+' .
 
-    $default  reduce using rule 69 (Multop)
+    $default  reduce using rule 64 (Addop)
 
 
 State 138
 
-   63 Multop: '*' .
+   65 Addop: '-' .
 
-    $default  reduce using rule 63 (Multop)
+    $default  reduce using rule 65 (Addop)
 
 
 State 139
 
-   64 Multop: '/' .
+   63 Additiveexpression: Additiveexpression Addop . Term
 
-    $default  reduce using rule 64 (Multop)
+    T_FALSE           shift, and go to state 47
+    T_ID              shift, and go to state 103
+    T_INTCONSTANT     shift, and go to state 48
+    T_STRINGCONSTANT  shift, and go to state 104
+    T_TRUE            shift, and go to state 49
+    '('               shift, and go to state 105
+    '-'               shift, and go to state 106
+    '!'               shift, and go to state 107
+
+    MethodCall    go to state 108
+    Term          go to state 157
+    Factor        go to state 116
+    BoolConstant  go to state 50
+    Constant      go to state 117
 
 
 State 140
 
-   65 Multop: '%' .
+   71 Multop: T_AND .
 
-    $default  reduce using rule 65 (Multop)
+    $default  reduce using rule 71 (Multop)
 
 
 State 141
 
-   62 Term: Term Multop . Factor
+   73 Multop: T_LEFTSHIFT .
 
-    T_FALSE        shift, and go to state 47
-    T_ID           shift, and go to state 98
-    T_INTCONSTANT  shift, and go to state 48
-    T_TRUE         shift, and go to state 49
-    '('            shift, and go to state 99
-    '-'            shift, and go to state 100
-    '!'            shift, and go to state 101
-
-    MethodCall    go to state 102
-    Factor        go to state 152
-    BoolConstant  go to state 50
-    Constant      go to state 111
+    $default  reduce using rule 73 (Multop)
 
 
 State 142
 
-   41 Lvalue: T_ID '[' Expr ']' .
+   72 Multop: T_OR .
 
-    $default  reduce using rule 41 (Lvalue)
+    $default  reduce using rule 72 (Multop)
 
 
 State 143
 
-   31 Statement: T_IF '(' Expr ')' . Block T_ELSE Block
-   32          | T_IF '(' Expr ')' . Block
+   74 Multop: T_RIGHTSHIFT .
 
-    '{'  shift, and go to state 62
-
-    Block  go to state 153
+    $default  reduce using rule 74 (Multop)
 
 
 State 144
 
-   35 Statement: T_RETURN '(' ')' ';' .
+   68 Multop: '*' .
 
-    $default  reduce using rule 35 (Statement)
+    $default  reduce using rule 68 (Multop)
 
 
 State 145
 
-   36 Statement: T_RETURN '(' Expr ')' . ';'
+   69 Multop: '/' .
 
-    ';'  shift, and go to state 154
+    $default  reduce using rule 69 (Multop)
 
 
 State 146
 
-   33 Statement: T_WHILE '(' Expr ')' . Block
+   70 Multop: '%' .
 
-    '{'  shift, and go to state 62
-
-    Block  go to state 155
+    $default  reduce using rule 70 (Multop)
 
 
 State 147
 
-   72 Factor: T_ID '[' Expr . ']'
+   67 Term: Term Multop . Factor
 
-    ']'  shift, and go to state 156
+    T_FALSE           shift, and go to state 47
+    T_ID              shift, and go to state 103
+    T_INTCONSTANT     shift, and go to state 48
+    T_STRINGCONSTANT  shift, and go to state 104
+    T_TRUE            shift, and go to state 49
+    '('               shift, and go to state 105
+    '-'               shift, and go to state 106
+    '!'               shift, and go to state 107
+
+    MethodCall    go to state 108
+    Factor        go to state 158
+    BoolConstant  go to state 50
+    Constant      go to state 117
 
 
 State 148
 
-   74 Factor: '(' Expr ')' .
+   46 Lvalue: T_ID '[' Expr ']' .
 
-    $default  reduce using rule 74 (Factor)
+    $default  reduce using rule 46 (Lvalue)
 
 
 State 149
 
-   47 FullMethodArgs: MethodArg ',' MethodArgs .
+   39 IfStmt: T_IF '(' Expr ')' . Block T_ELSE Block
+   40       | T_IF '(' Expr ')' . Block
 
-    $default  reduce using rule 47 (FullMethodArgs)
+    '{'  shift, and go to state 62
+
+    Block  go to state 159
 
 
 State 150
 
-   50 Simpleexpression: Simpleexpression Relop Additiveexpression .
-   58 Additiveexpression: Additiveexpression . Addop Term
+   42 ReturnStmt: T_RETURN '(' ')' ';' .
 
-    '+'  shift, and go to state 131
-    '-'  shift, and go to state 132
-
-    $default  reduce using rule 50 (Simpleexpression)
-
-    Addop  go to state 133
+    $default  reduce using rule 42 (ReturnStmt)
 
 
 State 151
 
-   58 Additiveexpression: Additiveexpression Addop Term .
-   62 Term: Term . Multop Factor
+   43 ReturnStmt: T_RETURN '(' Expr ')' . ';'
 
-    T_AND         shift, and go to state 134
-    T_LEFTSHIFT   shift, and go to state 135
-    T_OR          shift, and go to state 136
-    T_RIGHTSHIFT  shift, and go to state 137
-    '*'           shift, and go to state 138
-    '/'           shift, and go to state 139
-    '%'           shift, and go to state 140
-
-    $default  reduce using rule 58 (Additiveexpression)
-
-    Multop  go to state 141
+    ';'  shift, and go to state 160
 
 
 State 152
 
-   62 Term: Term Multop Factor .
+   37 WhileStmt: T_WHILE '(' Expr ')' . Block
 
-    $default  reduce using rule 62 (Term)
+    '{'  shift, and go to state 62
+
+    Block  go to state 161
 
 
 State 153
 
-   31 Statement: T_IF '(' Expr ')' Block . T_ELSE Block
-   32          | T_IF '(' Expr ')' Block .
+   77 Factor: T_ID '[' Expr . ']'
 
-    T_ELSE  shift, and go to state 157
-
-    $default  reduce using rule 32 (Statement)
+    ']'  shift, and go to state 162
 
 
 State 154
 
-   36 Statement: T_RETURN '(' Expr ')' ';' .
+   79 Factor: '(' Expr ')' .
 
-    $default  reduce using rule 36 (Statement)
+    $default  reduce using rule 79 (Factor)
 
 
 State 155
 
-   33 Statement: T_WHILE '(' Expr ')' Block .
+   52 FullMethodArgs: MethodArg ',' MethodArgs .
 
-    $default  reduce using rule 33 (Statement)
+    $default  reduce using rule 52 (FullMethodArgs)
 
 
 State 156
 
-   72 Factor: T_ID '[' Expr ']' .
+   55 Simpleexpression: Simpleexpression Relop Additiveexpression .
+   63 Additiveexpression: Additiveexpression . Addop Term
 
-    $default  reduce using rule 72 (Factor)
+    '+'  shift, and go to state 137
+    '-'  shift, and go to state 138
+
+    $default  reduce using rule 55 (Simpleexpression)
+
+    Addop  go to state 139
 
 
 State 157
 
-   31 Statement: T_IF '(' Expr ')' Block T_ELSE . Block
+   63 Additiveexpression: Additiveexpression Addop Term .
+   67 Term: Term . Multop Factor
 
-    '{'  shift, and go to state 62
+    T_AND         shift, and go to state 140
+    T_LEFTSHIFT   shift, and go to state 141
+    T_OR          shift, and go to state 142
+    T_RIGHTSHIFT  shift, and go to state 143
+    '*'           shift, and go to state 144
+    '/'           shift, and go to state 145
+    '%'           shift, and go to state 146
 
-    Block  go to state 158
+    $default  reduce using rule 63 (Additiveexpression)
+
+    Multop  go to state 147
 
 
 State 158
 
-   31 Statement: T_IF '(' Expr ')' Block T_ELSE Block .
+   67 Term: Term Multop Factor .
 
-    $default  reduce using rule 31 (Statement)
+    $default  reduce using rule 67 (Term)
+
+
+State 159
+
+   39 IfStmt: T_IF '(' Expr ')' Block . T_ELSE Block
+   40       | T_IF '(' Expr ')' Block .
+
+    T_ELSE  shift, and go to state 163
+
+    $default  reduce using rule 40 (IfStmt)
+
+
+State 160
+
+   43 ReturnStmt: T_RETURN '(' Expr ')' ';' .
+
+    $default  reduce using rule 43 (ReturnStmt)
+
+
+State 161
+
+   37 WhileStmt: T_WHILE '(' Expr ')' Block .
+
+    $default  reduce using rule 37 (WhileStmt)
+
+
+State 162
+
+   77 Factor: T_ID '[' Expr ']' .
+
+    $default  reduce using rule 77 (Factor)
+
+
+State 163
+
+   39 IfStmt: T_IF '(' Expr ')' Block T_ELSE . Block
+
+    '{'  shift, and go to state 62
+
+    Block  go to state 164
+
+
+State 164
+
+   39 IfStmt: T_IF '(' Expr ')' Block T_ELSE Block .
+
+    $default  reduce using rule 39 (IfStmt)

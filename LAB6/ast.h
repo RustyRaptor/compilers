@@ -32,7 +32,16 @@ enum AST_Tree_Element_Type {
         A_METHODID,
         A_CONSTANT_INT,
         A_CONSTANT_BOOL,
-        A_CONSTANT_STRING
+        A_CONSTANT_STRING,
+        A_BREAK,
+        A_VAR_RVALUE,
+        A_RETURN,
+        A_ASSIGN,
+        A_IF,
+        A_IFBODY,
+        A_ELSE,
+        A_METHODCALL,
+        A_CONTINUE
 
 
 	// missing
@@ -41,7 +50,20 @@ enum AST_Tree_Element_Type {
 enum AST_Operators {
 	A_PLUS,
 	A_MINUS,
+        A_UMINUS,
 	A_TIMES,
+        A_DIVIDE,
+        A_MOD,
+        A_AND,
+        A_OR,
+        A_LEFTSHIFT,
+        A_RIGHTSHIFT,
+        A_LT,
+        A_GT,
+        A_EQ,
+        A_LEQ,
+        A_GEQ,
+        A_NEQ,
 	A_NOT
 	// missing
 };

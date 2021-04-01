@@ -1,0 +1,87 @@
+Parsing completed
+ EXTERN FUNC print_int
+  EXTERN Type  INT 
+END EXTERN with Type:
+  INT  Package : foo
+     Variable  x with type  INT  = 3
+  Variable  Y with type  BOOLEAN  = 1
+  Variable  A[100]  with type  INT  
+  METHOD FUNCTION  'foo' with type  INT 
+    (
+    Method Variable x INT 
+    Method Variable y BOOLEAN 
+    )
+    BLOCK STATEMENT 
+     Variable  x with type  INT  
+     Variable  A[100]  with type  BOOLEAN  
+     BREAK STATEMENT   
+     ASSIGNMENT STATEMENT
+      Variable x 
+      EXPR  + 
+       Variable y 
+       Variable z 
+         [
+         Variable A 
+         ]
+     ASSIGNMENT STATEMENT
+      Variable x 
+      CONSTANT BOOLEAN  true
+     ASSIGNMENT STATEMENT
+      Variable y 
+      CONSTANT BOOLEAN  false
+     IF STATEMENT   
+      EXPR  > 
+       Variable x 
+       Variable y 
+             BLOCK STATEMENT 
+        ASSIGNMENT STATEMENT
+         Variable x 
+         EXPR  + 
+          CONSTANT INTEGER  3
+          CONSTANT INTEGER  4
+       ELSE   
+        BLOCK STATEMENT 
+         ASSIGNMENT STATEMENT
+          Variable x 
+          Variable y 
+     RETURN STATEMENT   
+     RETURN STATEMENT   
+     RETURN STATEMENT   
+      EXPR  >> 
+       EXPR  << 
+        Variable x 
+        Variable y 
+       Variable z 
+     WHILE STATEMENT 
+      EXPR  != 
+       CONSTANT BOOLEAN  true
+       CONSTANT BOOLEAN  false
+       BLOCK STATEMENT 
+        ASSIGNMENT STATEMENT
+         Variable x 
+         EXPR  && 
+          CONSTANT INTEGER  3
+          CONSTANT INTEGER  2
+         METHOD CALL name: print_string
+        (
+METHOD ARG 
+         CONSTANT STRING  "hello world"
+        )
+        ASSIGNMENT STATEMENT
+         Variable x 
+          METHOD CALL name: f
+         (
+METHOD ARG 
+           METHOD CALL name: g
+          (
+METHOD ARG 
+           EXPR  !
+            EXPR  || 
+             EXPR  && 
+              Variable x 
+              Variable y 
+             Variable z 
+          )
+         )
+   
+Finished printing AST 
