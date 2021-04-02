@@ -16,6 +16,7 @@ static int mydebug;
 /* define the enumerated types for the AST.  THis is used to tell us what
 sort of production rule we came across */
 
+/* added all the needed tree nodes */
 enum AST_Tree_Element_Type {
         A_PROGRAM,
 	A_EXTERN,
@@ -47,6 +48,8 @@ enum AST_Tree_Element_Type {
 	// missing
 };
 
+
+/* Added all the needed operators */
 enum AST_Operators {
 	A_PLUS,
 	A_MINUS,

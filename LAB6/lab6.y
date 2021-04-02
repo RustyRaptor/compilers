@@ -40,6 +40,13 @@ from LEX and how the operators are associated */
     enum AST_Operators operator;
 }
 
+
+// I commented out the tokens that aren't being used.
+
+// I also removed the token for T_LT because idk why one was a token and the 
+// other was a char??
+
+
 // Added a token for each of the lex tokens
 %token T_AND
 %token T_ASSIGN
@@ -229,6 +236,10 @@ Statements:
                 $$->next = $2;
         };
 
+/* Moved all of the Statement into one rule and moved each item into it's own
+separate rule.
+ */
+ /* Connected  these all */
 Statement: 
         Block { $$ = $1; }
         | Assign ';' { $$ = $1; }
@@ -240,6 +251,7 @@ Statement:
         | ContinueStmt { $$ = $1; }
         ;
 
+/* Created a continue statement idk if this was needed */
 ContinueStmt: T_CONTINUE  ';' {$$ = ASTCreateNode(A_CONTINUE);};
 
 WhileStmt: 
@@ -291,6 +303,9 @@ Assign:
 
 Lvalue: 
         T_ID {
+                /* I am using A_VAR_RVALUE for both the LVALUE and RVALUE
+                Mostly because the node serves the same purpose.
+                 */
                 $$ = ASTCreateNode(A_VAR_RVALUE);
                 $$->name = $1;
         } 
@@ -379,18 +394,6 @@ Term:
                 $$->S2 = $3;
         };
 /* added modulus as a multi operator */
-/*
-	A_PLUS,
-	A_MINUS,
-	A_TIMES,
-        A_DIVIDE,
-        A_MOD,
-        A_AND,
-        A_OR,
-        A_LEFTSHIFT,
-        A_RIGHTSHIFT,
-	A_NOT
-        */
 Multop: 
         '*' { $$ = A_TIMES; }
         | '/' { $$ = A_DIVIDE; }
@@ -419,6 +422,7 @@ Factor:
                 $$->operator = A_NOT;
                 $$->S1 = $2;
         }
+        /* moved this around a lot until I got it working in here */
         | T_STRINGCONSTANT {
                 $$ = ASTCreateNode(A_CONSTANT_STRING);
                 $$->name = $1;

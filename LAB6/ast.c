@@ -65,7 +65,7 @@ void ASTprint(int level, ASTnode *p)
 	if (p == NULL)
 		return;
 	else {
-		PT(level); /*indent */
+		PT(level); /* indent */
 		switch (p->type) {
 		case A_VAR_RVALUE:
 			printf("Variable %s \n", p->name);
@@ -218,6 +218,7 @@ void ASTprint(int level, ASTnode *p)
 				printf(" !");
 				break;
 			case A_UMINUS:
+                        // print words so we know it's not just minus
 				printf(" Unary Minus");
 				break;
 			default:
