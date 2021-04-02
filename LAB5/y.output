@@ -1,8 +1,8 @@
 Terminals unused in grammar
 
-   T_DOT
-   T_FOR
-   T_NULL
+    T_DOT
+    T_FOR
+    T_NULL
 
 
 Grammar
@@ -139,134 +139,170 @@ Grammar
 
 Terminals, with rules where they appear
 
-$end (0) 0
-'!' (33) 75
-'%' (37) 65
-'(' (40) 4 16 34 40 41 42 44 45 74
-')' (41) 4 16 34 40 41 42 44 45 74
-'*' (42) 63
-'+' (43) 59
-',' (44) 8 20 39
-'-' (45) 60 76
-'/' (47) 64
-';' (59) 4 11 12 13 24 25 29 33 43 44 45 46 47
-'<' (60) 52
-'[' (91) 32 72 85
-']' (93) 32 72 85
-'{' (123) 1 21
-'}' (125) 1 21
-error (256)
-T_AND (258) 66
-T_ASSIGN (259) 13 30
-T_BOOLTYPE (260) 80
-T_BREAK (261) 46
-T_CHARCONSTANT (262) 88
-T_CONTINUE (263) 47
-T_DOT (264)
-T_ELSE (265) 40
-T_EQ (266) 55
-T_EXTERN (267) 4
-T_FALSE (268) 84
-T_FOR (269)
-T_FUNC (270) 4 16
-T_GEQ (271) 54
-T_GT (272) 53
-T_ID (273) 1 4 11 12 13 16 19 20 24 25 31 32 34 70 72
-T_IF (274) 40 41
-T_INTCONSTANT (275) 85 86
-T_INTTYPE (276) 79
-T_LEFTSHIFT (277) 68
-T_LEQ (278) 51
-T_NEQ (279) 56
-T_NULL (280)
-T_OR (281) 67
-T_PACKAGE (282) 1
-T_RETURN (283) 43 44 45
-T_RIGHTSHIFT (284) 69
-T_STRINGCONSTANT (285) 87
-T_STRINGTYPE (286) 77
-T_TRUE (287) 83
-T_VAR (288) 11 12 13 24 25
-T_VOID (289) 81
-T_WHILE (290) 42
+    $end (0) 0
+    '!' (33) 75
+    '%' (37) 65
+    '(' (40) 4 16 34 40 41 42 44 45 74
+    ')' (41) 4 16 34 40 41 42 44 45 74
+    '*' (42) 63
+    '+' (43) 59
+    ',' (44) 8 20 39
+    '-' (45) 60 76
+    '/' (47) 64
+    ';' (59) 4 11 12 13 24 25 29 33 43 44 45 46 47
+    '<' (60) 52
+    '[' (91) 32 72 85
+    ']' (93) 32 72 85
+    '{' (123) 1 21
+    '}' (125) 1 21
+    error (256)
+    T_AND (258) 66
+    T_ASSIGN (259) 13 30
+    T_BOOLTYPE (260) 80
+    T_BREAK (261) 46
+    T_CHARCONSTANT (262) 88
+    T_CONTINUE (263) 47
+    T_DOT (264)
+    T_ELSE (265) 40
+    T_EQ (266) 55
+    T_EXTERN (267) 4
+    T_FALSE (268) 84
+    T_FOR (269)
+    T_FUNC (270) 4 16
+    T_GEQ (271) 54
+    T_GT (272) 53
+    T_ID (273) 1 4 11 12 13 16 19 20 24 25 31 32 34 70 72
+    T_IF (274) 40 41
+    T_INTCONSTANT (275) 85 86
+    T_INTTYPE (276) 79
+    T_LEFTSHIFT (277) 68
+    T_LEQ (278) 51
+    T_NEQ (279) 56
+    T_NULL (280)
+    T_OR (281) 67
+    T_PACKAGE (282) 1
+    T_RETURN (283) 43 44 45
+    T_RIGHTSHIFT (284) 69
+    T_STRINGCONSTANT (285) 87
+    T_STRINGTYPE (286) 77
+    T_TRUE (287) 83
+    T_VAR (288) 11 12 13 24 25
+    T_VOID (289) 81
+    T_WHILE (290) 42
 
 
 Nonterminals, with rules where they appear
 
-$accept (51)
-    on left: 0
-Program (52)
-    on left: 1, on right: 0
-Externs (53)
-    on left: 2 3, on right: 1 3
-ExternDefn (54)
-    on left: 4, on right: 3
-ExternParmList (55)
-    on left: 5 6, on right: 4 8
-FullExternParmList (56)
-    on left: 7 8, on right: 6
-FieldDecls (57)
-    on left: 9 10, on right: 1 10
-FieldDecl (58)
-    on left: 11 12 13, on right: 10
-MethodDecls (59)
-    on left: 14 15, on right: 1 15
-MethodDecl (60)
-    on left: 16, on right: 15
-IdTypeList (61)
-    on left: 17 18, on right: 16 20
-IdTypeList1 (62)
-    on left: 19 20, on right: 18
-Block (63)
-    on left: 21, on right: 16 28 40 41 42
-VarDecls (64)
-    on left: 22 23, on right: 21 23
-VarDecl (65)
-    on left: 24 25, on right: 23
-Statements (66)
-    on left: 26 27, on right: 21 27
-Statement (67)
-    on left: 28 29 33 40 41 42 43 44 45 46 47, on right: 27
-Assign (68)
-    on left: 30, on right: 29
-Lvalue (69)
-    on left: 31 32, on right: 30
-MethodCall (70)
-    on left: 34, on right: 33 71
-MethodArg (71)
-    on left: 35, on right: 38 39
-MethodArgs (72)
-    on left: 36 37, on right: 34 39
-FullMethodArgs (73)
-    on left: 38 39, on right: 37
-Expr (74)
-    on left: 48, on right: 30 32 35 40 41 42 45 72 74
-Simpleexpression (75)
-    on left: 49 50, on right: 48 50
-Relop (76)
-    on left: 51 52 53 54 55 56, on right: 50
-Additiveexpression (77)
-    on left: 57 58, on right: 49 50 58
-Addop (78)
-    on left: 59 60, on right: 58
-Term (79)
-    on left: 61 62, on right: 57 58 62
-Multop (80)
-    on left: 63 64 65 66 67 68 69, on right: 62
-Factor (81)
-    on left: 70 71 72 73 74 75 76, on right: 61 62 75 76
-ExternType (82)
-    on left: 77 78, on right: 7 8
-Type (83)
-    on left: 79 80, on right: 11 13 19 20 24 78 82 85
-MethodType (84)
-    on left: 81 82, on right: 4 16
-BoolConstant (85)
-    on left: 83 84, on right: 89
-ArrayType (86)
-    on left: 85, on right: 12 25
-Constant (87)
-    on left: 86 87 88 89, on right: 13 73
+    $accept (51)
+        on left: 0
+    Program (52)
+        on left: 1
+        on right: 0
+    Externs (53)
+        on left: 2 3
+        on right: 1 3
+    ExternDefn (54)
+        on left: 4
+        on right: 3
+    ExternParmList (55)
+        on left: 5 6
+        on right: 4 8
+    FullExternParmList (56)
+        on left: 7 8
+        on right: 6
+    FieldDecls (57)
+        on left: 9 10
+        on right: 1 10
+    FieldDecl (58)
+        on left: 11 12 13
+        on right: 10
+    MethodDecls (59)
+        on left: 14 15
+        on right: 1 15
+    MethodDecl (60)
+        on left: 16
+        on right: 15
+    IdTypeList (61)
+        on left: 17 18
+        on right: 16 20
+    IdTypeList1 (62)
+        on left: 19 20
+        on right: 18
+    Block (63)
+        on left: 21
+        on right: 16 28 40 41 42
+    VarDecls (64)
+        on left: 22 23
+        on right: 21 23
+    VarDecl (65)
+        on left: 24 25
+        on right: 23
+    Statements (66)
+        on left: 26 27
+        on right: 21 27
+    Statement (67)
+        on left: 28 29 33 40 41 42 43 44 45 46 47
+        on right: 27
+    Assign (68)
+        on left: 30
+        on right: 29
+    Lvalue (69)
+        on left: 31 32
+        on right: 30
+    MethodCall (70)
+        on left: 34
+        on right: 33 71
+    MethodArg (71)
+        on left: 35
+        on right: 38 39
+    MethodArgs (72)
+        on left: 36 37
+        on right: 34 39
+    FullMethodArgs (73)
+        on left: 38 39
+        on right: 37
+    Expr (74)
+        on left: 48
+        on right: 30 32 35 40 41 42 45 72 74
+    Simpleexpression (75)
+        on left: 49 50
+        on right: 48 50
+    Relop (76)
+        on left: 51 52 53 54 55 56
+        on right: 50
+    Additiveexpression (77)
+        on left: 57 58
+        on right: 49 50 58
+    Addop (78)
+        on left: 59 60
+        on right: 58
+    Term (79)
+        on left: 61 62
+        on right: 57 58 62
+    Multop (80)
+        on left: 63 64 65 66 67 68 69
+        on right: 62
+    Factor (81)
+        on left: 70 71 72 73 74 75 76
+        on right: 61 62 75 76
+    ExternType (82)
+        on left: 77 78
+        on right: 7 8
+    Type (83)
+        on left: 79 80
+        on right: 11 13 19 20 24 78 82 85
+    MethodType (84)
+        on left: 81 82
+        on right: 4 16
+    BoolConstant (85)
+        on left: 83 84
+        on right: 89
+    ArrayType (86)
+        on left: 85
+        on right: 12 25
+    Constant (87)
+        on left: 86 87 88 89
+        on right: 13 73
 
 
 State 0
