@@ -1,0 +1,29 @@
+extern func print_int (int) int;
+
+package foo {
+     var x int = 3;
+     var Y bool = true;
+     var A [100] int;
+    func foo (x int,  y bool) int {
+       var x int ;
+       var A[100] bool;
+       break;
+       x = y + z[A];
+       x = true;
+       y = false;
+      if ( x> y) { x = 3+ 4;}
+         else
+            { x = y;}
+      return;
+      return();
+      return( x << y >> z);
+      while (true != false)
+       { x = 3 && 2;
+         print_string("hello world");
+         x = f( g ( ! (x && y || z)));
+        }
+
+
+    } 
+
+} // end of foo
