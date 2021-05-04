@@ -1,0 +1,39 @@
+extern func print_int (int) void;
+extern func print_string (string) void;
+
+package fart {
+	var y int = 7;
+	var b bool = false;
+
+	var xx int;
+	var Z[2] int;
+	var Y[100] bool;
+        var z  int = 10;
+
+	func f(b int) int 
+	{
+		var y int;
+		{  var  x[10] int;
+			x[2+3-5]=b + f(5+x[2]*b);
+		}
+		{  var x[10] int;
+			x[2+3-5]=b + f(5+x[2]*b);
+		}
+	}
+
+
+	func main(arg1 int, arg2 int) int
+	{
+		print_int(  f(arg1 + arg2 -z + y));
+		print_int(  f(arg1 + arg2 -z + y));
+		print_string("hello world\n");
+		print_string("hello 1world\n");
+		print_string("hello 2world\n");
+		print_string("hello 3world\n");
+		print_string("hello 4world\n");
+		print_string("hello 5world\n");
+		print_string("hello 6world\n");
+		print_string("hello 7world\n");
+
+	}
+} // of package foo
