@@ -1,0 +1,31 @@
+extern func print_int (int) void;
+extern func print_string (string) void;
+extern func read_int () int;
+
+package fibinaci {
+        var y int =7;
+        var Z int ;
+        var A[100] int ;
+        var x bool = true;
+
+      func fib ( n int) int
+      {
+          print_string("in fib");
+          if ( n <= 0) {return (0) ;}
+          if ( n == 1) {return (1) ;}
+          return( fib(n-1) + fib(n-2));
+        
+      } // of fib
+
+      func main () int 
+      {
+         var x int;
+         x=fib(4);
+         print_int(5);
+         print_string("hello");
+         print_int(x);
+
+      } // of main
+
+} // of foo
+

@@ -7,8 +7,10 @@
 */
 
 /*
-Ziad Arafat - Apr 11 2021
-Lab 7
+Ziad Arafat - Apr 26 2021
+Lab 9
+4/3/2021 added variable to ASTnode to handle labels for strings
+
 */
 
 #include <malloc.h>
@@ -98,6 +100,7 @@ typedef struct ASTnodetype {
 	///.. missing
 	struct ASTnodetype *S1, *S2, *next; /* used for holding IF and WHILE
                                          components -- not very descriptive */
+	char *label;
 } ASTnode;
 
 #include "symtable.h"

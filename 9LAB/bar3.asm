@@ -20,10 +20,19 @@ x:	.word 1	 # global var initialized
 
 main:		# MAIN METHOD LABEL
 
-	subu $t0 $sp 8		 #set up $t0 to be the new spot for SP
+	subu $t0 $sp 16		 #set up $t0 to be the new spot for SP
 	sw $ra ($t0)		 #Store the return address in offset 0
 	sw $sp 4($t0)		 #Store the old stack pointer in offset 4
 	move $sp $t0		 #set the stack pointer to the new value
+
+
+			 #EMIT PRINT INT HERE
+	li $a0, 5		 #expr constant value
+	li $v0 1		 #set up write call
+	syscall		 #print a number
+	li $v0, 4		 #print NEWLINE
+	la $a0, _NL		 #print NEWLINE string location
+	syscall		 #call print a NEWLINE
 
 
 	li $v0 0		 #return NULL zero (0)

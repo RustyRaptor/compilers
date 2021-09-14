@@ -1,29 +1,59 @@
-extern func print_int (int) int;
+// extern func print_int (int) void;
+// extern func print_string (string) void;
+
+// package foo {
+// 	var y int =7;
+// 	var Z[100] int;
+// 	var Y[100] bool;
+//         var z  int = 10;
+
+// 	func f(b int) int 
+// 	{
+// 		var y int;
+// 		{  var  x[10] int;
+// 			x[2+3-5]=b + f(5+x[2]*b);
+// 		}
+// 		{  var x[10] int;
+// 			x[2+3-5]=b + f(5+x[2]*b);
+// 		}
+// 	}
+
+
+// 	func main(arg1 int, arg2 int) int
+// 	{
+// 		print_int(  f(arg1 + arg2 -z + y));
+// 		print_int(  f(arg1 + arg2 -z + y));
+// 		print_string("hello world\n");
+
+// 	}
+// } // of package foo
+
+extern func print_int (int) void;
+extern func print_string (string) void;
 
 package foo {
-     var x int = 3;
-     var Y bool = true;
-     var A [100] int;
-    func foo (x int,  y bool) int {
-       var x int ;
-       var A[100] bool;
-       break;
-       x = y + z[A];
-       x = true;
-       y = false;
-      if ( x> y) { x = 3+ 4;}
-         else
-            { x = y;}
-      return;
-      return();
-      return( x << y >> z);
-      while (true != false)
-       { x = 3 && 2;
-         print_string("hello world");
-         x = f( g ( ! (x && y || z)));
-        }
+	var y int =7;
+	var Z[100] int;
+	var Y[100] bool;
+        var z  int = 10;
+
+	func f(b int) int 
+	{
+		var y int;
+		{  var  x[10] int;
+			x[2+3-5]=b + f(5+x[2]*b);
+		}
+		{  var x[10] int;
+			x[2+3-5]=b + f(5+x[2]*b);
+		}
+	}
 
 
-    } 
+	func main(arg1 int, arg2 int) int
+	{
+		print_int(  f(arg1 + arg2 -z + y));
+		print_int(  f(arg1 + arg2 -z + y));
+		print_string("hello world\n");
 
-} // end of foo
+	}
+} // of package foo

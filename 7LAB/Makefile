@@ -5,22 +5,22 @@
 FLAGS = -O0 -Wextra -pedantic 
 
 # Entry point target
-all: lab6
+all: lab7
 
 # Compile all the THINGS!
-lab6: lab6.l lab6.y ast.c ast.h
-	lex lab6.l
-	yacc -d --verbose --debug lab6.y
-	gcc $(FLAGS) y.tab.c lex.yy.c ast.c -o lab6 -lm
+lab7: lab7.l lab7.y ast.c ast.h symtable.c symtable.h
+	lex lab7.l
+	yacc -d --verbose --debug lab7.y
+	gcc $(FLAGS) y.tab.c lex.yy.c ast.c symtable.c -o lab7 -lm
 
 # remove the binary and other generated stuff
 clean:
-	rm lab6 lex.yy.c y.tab.c y.tab.h
+	rm lab7 lex.yy.c y.tab.c y.tab.h
 
 # runs valgrind to look for any memory mistakes
 memcheck:
-	valgrind ./lab6 -s
+	valgrind ./lab7 -s
 
 # executes our code to test it's functionality
 test:
-	./lab6 < testinput.txt
+	./lab7 < testinput.txt

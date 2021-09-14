@@ -1,0 +1,201 @@
+
+	LABEL		Offset	LEVEL	type	subtype
+	print_int		0	0	VOID 	Extern Method 
+
+	LABEL		Offset	LEVEL	type	subtype
+	print_string		0	0	VOID 	Extern Method 
+	print_int		0	0	VOID 	Extern Method 
+
+	LABEL		Offset	LEVEL	type	subtype
+	foo		0	0	INT 	Package 
+	print_string		0	0	VOID 	Extern Method 
+	print_int		0	0	VOID 	Extern Method 
+
+	LABEL		Offset	LEVEL	type	subtype
+	foo1		0	0	INT 	Method 
+	A		3	0	INT 	Array 
+	Y		1	0	INT 	Array 
+	x		0	0	INT 	Scalar 
+	foo		0	0	INT 	Package 
+	print_string		0	0	VOID 	Extern Method 
+	print_int		0	0	VOID 	Extern Method 
+
+	LABEL		Offset	LEVEL	type	subtype
+	W11		4	1	INT 	Scalar 
+	x		3	1	INT 	Scalar 
+	y		2	1	BOOL 	Scalar 
+	foo1		0	0	INT 	Method 
+	A		3	0	INT 	Array 
+	Y		1	0	INT 	Array 
+	x		0	0	INT 	Scalar 
+	foo		0	0	INT 	Package 
+	print_string		0	0	VOID 	Extern Method 
+	print_int		0	0	VOID 	Extern Method 
+
+	LABEL		Offset	LEVEL	type	subtype
+	_t2		107	2	INT 	Scalar 
+	_t1		106	1	INT 	Scalar 
+	_t0		105	1	INT 	Scalar 
+	A		5	1	INT 	Array 
+	W11		4	1	INT 	Scalar 
+	x		3	1	INT 	Scalar 
+	y		2	1	BOOL 	Scalar 
+	foo1		0	0	INT 	Method 
+	A		3	0	INT 	Array 
+	Y		1	0	INT 	Array 
+	x		0	0	INT 	Scalar 
+	foo		0	0	INT 	Package 
+	print_string		0	0	VOID 	Extern Method 
+	print_int		0	0	VOID 	Extern Method 
+
+	LABEL		Offset	LEVEL	type	subtype
+	_t1		106	1	INT 	Scalar 
+	_t0		105	1	INT 	Scalar 
+	A		5	1	INT 	Array 
+	W11		4	1	INT 	Scalar 
+	x		3	1	INT 	Scalar 
+	y		2	1	BOOL 	Scalar 
+	foo1		0	0	INT 	Method 
+	A		3	0	INT 	Array 
+	Y		1	0	INT 	Array 
+	x		0	0	INT 	Scalar 
+	foo		0	0	INT 	Package 
+	print_string		0	0	VOID 	Extern Method 
+	print_int		0	0	VOID 	Extern Method 
+
+	LABEL		Offset	LEVEL	type	subtype
+	_t5		109	2	INT 	Scalar 
+	_t4		108	1	BOOL 	Scalar 
+	_t3		107	1	BOOL 	Scalar 
+	_t1		106	1	INT 	Scalar 
+	_t0		105	1	INT 	Scalar 
+	A		5	1	INT 	Array 
+	W11		4	1	INT 	Scalar 
+	x		3	1	INT 	Scalar 
+	y		2	1	BOOL 	Scalar 
+	foo1		0	0	INT 	Method 
+	A		3	0	INT 	Array 
+	Y		1	0	INT 	Array 
+	x		0	0	INT 	Scalar 
+	foo		0	0	INT 	Package 
+	print_string		0	0	VOID 	Extern Method 
+	print_int		0	0	VOID 	Extern Method 
+
+	LABEL		Offset	LEVEL	type	subtype
+	_t4		108	1	BOOL 	Scalar 
+	_t3		107	1	BOOL 	Scalar 
+	_t1		106	1	INT 	Scalar 
+	_t0		105	1	INT 	Scalar 
+	A		5	1	INT 	Array 
+	W11		4	1	INT 	Scalar 
+	x		3	1	INT 	Scalar 
+	y		2	1	BOOL 	Scalar 
+	foo1		0	0	INT 	Method 
+	A		3	0	INT 	Array 
+	Y		1	0	INT 	Array 
+	x		0	0	INT 	Scalar 
+	foo		0	0	INT 	Package 
+	print_string		0	0	VOID 	Extern Method 
+	print_int		0	0	VOID 	Extern Method 
+Parsing completed
+
+	LABEL		Offset	LEVEL	type	subtype
+	foo1		0	0	INT 	Method 
+	A		3	0	INT 	Array 
+	Y		1	0	INT 	Array 
+	x		0	0	INT 	Scalar 
+	foo		0	0	INT 	Package 
+	print_string		0	0	VOID 	Extern Method 
+	print_int		0	0	VOID 	Extern Method 
+
+
+
+EXTERN FUNC print_int 
+ EXTERN Type:  INT 
+END EXTERN with Type:  VOID 
+
+EXTERN FUNC print_string 
+ EXTERN Type:  CONSTANT STRING 
+END EXTERN with Type:  VOID 
+
+Package : foo 
+ 
+ Variable  x  offset 0  with type  INT  = 3 
+
+ Variable  Y  offset 1 [2] with type  INT 
+ Variable  A  offset 3 [100] with type  INT 
+ 
+ METHOD FUNCTION foo1  INT 
+   ( 
+   PARAMETER  INT  x offset 3
+   PARAMETER  BOOLEAN  y offset 2
+   ) 
+   BLOCK STATEMENT  
+    Variable  W11  offset 4  with type  INT 
+    Variable  A  offset 5 [100] with type  INT 
+    BREAK STATEMENT 
+    ASSIGNMENT STATEMENT 
+    Variable x 
+      EXPR  + 
+       Variable x 
+       Variable Y 
+       [
+         Variable A 
+         [
+           CONSTANT INTEGER  2
+         ] 
+       ] 
+    ASSIGNMENT STATEMENT 
+    Variable x 
+      CONSTANT INTEGER  1
+    ASSIGNMENT STATEMENT 
+    Variable y 
+      CONSTANT BOOLEAN  false
+    IF STATEMENT  
+     EXPR  > 
+      Variable x 
+      Variable x 
+       BLOCK STATEMENT  
+        ASSIGNMENT STATEMENT 
+        Variable x 
+          EXPR  + 
+           CONSTANT INTEGER  3
+           CONSTANT INTEGER  4
+      ELSE
+       BLOCK STATEMENT  
+        ASSIGNMENT STATEMENT 
+        Variable x 
+          Variable A 
+          [
+            CONSTANT INTEGER  2
+          ] 
+    RETURN STATEMENT  
+    RETURN STATEMENT  
+    RETURN STATEMENT  
+     EXPR  != 
+      Variable y 
+      Variable y 
+    WHILE STATEMENT 
+     EXPR  != 
+      CONSTANT BOOLEAN  true
+      CONSTANT BOOLEAN  false
+      BLOCK STATEMENT  
+       ASSIGNMENT STATEMENT 
+       Variable x 
+         EXPR  + 
+          CONSTANT INTEGER  3
+          CONSTANT INTEGER  2
+       METHOD CALL name: print_string 
+         (
+          METHOD ARG 
+          CONSTANT STRING  "hello world"
+         )
+       ASSIGNMENT STATEMENT 
+       Variable x 
+         METHOD CALL name: foo1 
+           (
+            METHOD ARG 
+            CONSTANT INTEGER  3
+            METHOD ARG 
+            CONSTANT BOOLEAN  true
+           )

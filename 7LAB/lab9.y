@@ -1,29 +1,15 @@
 /*
-Ziad Arafat - May 7 2021
-Lab 9
-*/
-
-/*
-Add debug flag to args 
-*/
-/*
-April 26 2021:
-        - Updated main() to allow command line args
-        - Updated debug flag using args
-        - opened file using fopen and the command line args
-        - checked for NULL files when perms are not working
-        - included emit.h
+Ziad Arafat - Mar 8 2021
+Lab 5
 */
 
 %{
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "ast.h"
 #include "symtable.h"
-#include "emit.h"
 
 int level = 0; // the level of the scope we are in. 
 int offset = 0; // Keeps track of fielddecl offset values
@@ -160,7 +146,7 @@ ExternDefn:
                 // offset++;
                 
                 // moved to main
-                 if(mydebug) Display(); // Display the table for debugging
+                Display(); // Display the table for debugging
         };
 
 ExternParmList: 
@@ -247,37 +233,10 @@ MethodDecls:
 MethodDecl: 
         // set global offset to offset them reset our offset
         // this way we resume global offsets and our offset is ready for next block
-        T_FUNC T_ID {
-                struct SymbTab *s;
+        T_FUNC T_ID { goffset = offset;  offset = 2; maxoffset = offset; } 
+        '(' IdTypeList ')' MethodType 
+        { Insert($2,$7,ID_Sub_Type_Method, level, 0, 0, $5); } Block {
 
-                s = Search($2, level, 0);
-
-                if (s != NULL){
-                        fprintf(stderr, "Symbol %s has already been used in a method\n", $2);
-                        yyerror("duplicate method name");
-                        exit(1);
-                } else {
-                        s = Insert($2,0,ID_Sub_Type_Method, level, 0, 0, NULL);
-                        // update the type after we get it
-                        if (mydebug) Display();
-
-                        // set offset for start of method
-                        goffset = offset;
-                        offset = 2;
-                        maxoffset = offset; 
-                }
-
-
-
-                
-        } '(' IdTypeList ')' MethodType {
-                struct SymbTab *s;
-                s = Search($2, level, 0);
-                s->Type = $7;
-                s->fparms = $5;
-                
-        } Block {
-                
                 // increment anything greater than $2 by 1 for the new component
                 $$ = ASTCreateNode(A_METHODDEC);
                 $$->name = $2;
@@ -290,7 +249,7 @@ MethodDecl:
                 $$->symbol->mysize = maxoffset; // max size needed to run program
                 offset = goffset;
         };
- 
+
 IdTypeList: 
         /* empty */ { $$ = NULL; }
         | IdTypeList1 { $$ = $1; };
@@ -338,8 +297,7 @@ Block:
                 // incremented these because added in-rule action
                 $$->S1 = $3; // set S1 to the VarDecls
                 $$->S2 = $4; // set S2 to the Statements
-                if(mydebug) Display(); // Display here so we can see the symtab at each level
-
+                Display(); // Display here so we can see the symtab at each level
                 // if the offset is greater than the maxoffset of the method
                 // then we set the maxoffset to the offset to fix it's max value
                 if (offset > maxoffset) {
@@ -439,13 +397,10 @@ IfStmt:
                 $$->S1 = $3; // set S1 to the Expression node
                 $$->S2 = ASTCreateNode(A_IFBODY); // create a separate node for the body in S2
                 $$->S2->S1 = $5;  // set the S1 of the body to the block of the IF
-                $$->S2->S2 = $7; // create a new node for the else statement after the body
+                $$->S2->S2 = ASTCreateNode(A_ELSE); // create a new node for the else statement after the body
 
-                /*I modified my original implementation to 
-                not have an A_ELSE node. Instead we just store the blocks
-                directly in the S1 and S2 of the A_IFBODY respectively. 
-                This makes the logic on the emit.c side much simpler*/
-
+                // set the S1 of the Else to the Else's Block
+                $$->S2->S2->S1 = $7;
         }
         | T_IF '(' Expr ')' Block {
                 $$ = ASTCreateNode(A_IF);
@@ -476,19 +431,8 @@ Assign:
                 $$ = ASTCreateNode(A_ASSIGN);
                 $$->S1 = $1; // set the S1 to the left hand side 
                 $$->S2 = $3; // set the S2 to the right hand side
-                $$->name = TEMP_CREATE();
-                 // create a temporary symbol to hold value
-                $$->symbol = Insert($$->name, $$->A_Declared_Type, ID_Sub_Type_Scalar, level, 1, offset, NULL);
-
-                // Determine if we need to increment offset
-                // Yes we do because the assignments need temporary values 
-                // in the function's space
-                offset++;
         };
 
-
-// in case we wanna do for loops I guess
-// TODO: Implement for loops
 /* Assigns: Assign
                    | Assign ',' Assigns 
                    
@@ -559,7 +503,7 @@ MethodCall:
                 
                 // if we didn't find one lets barf because it wasnt defined
                 if(p == NULL) {
-                        yyerror("Method symbol not defined");
+                        yyerror("Symbol on LVALUE not defined");
                         yyerror($1);
                         exit(1);
                 }
@@ -587,14 +531,7 @@ MethodCall:
                 $$->A_Declared_Type = p->Type; // type matches it's formal type
         };
 
-MethodArg: Expr {
-        $$ = $1;
-     // create a temporary symbol to hold value
-        $$->symbol = Insert(TEMP_CREATE(),$$->A_Declared_Type, ID_Sub_Type_Scalar, level, 1, offset, NULL);
-
-        // increment offset by 1 because of the temporary value being stored
-        offset++;
-        };
+MethodArg: Expr { $$ = $1; };
 
 MethodArgs:
         /* empty */ {
@@ -722,7 +659,7 @@ Factor:
                 p = Search($1, level, 1);
 
                 if(p == NULL) {
-                        yyerror("Symbol on RVALUE not defined");
+                        yyerror("Symbol on LVALUE not defined");
                         yyerror($1);
                         exit(1);
                 }
@@ -853,39 +790,11 @@ Constant:
         };
 %%    /* end of rules, start of program */
 
-int main(int argc, char ** argv){
-
-        for (int i = 1; i<argc; i++) {
-                /* printf("argv: %d is %s\n", i, argv[i]); */
-
-                // set debug flag
-                if (strcmp(argv[i], "-d") == 0) {
-                        mydebug = 1;
-                }
-
-                // check next argument for open file argument 
-                if (strcmp(argv[i], "-o") == 0) {
-                        char filename[100]; // new file name stored
-                        strcat(filename, argv[i+1]);
-                        strcat(filename, ".asm");
-                        /* printf("file name is %s\n", filename); */
-                        fp = fopen(filename, "w"); 
-                        if (fp == NULL) {
-                                printf("unable to open %s \n", filename);
-                                exit(1);
-                        }
-                }
-
-        }
-        /* printf("argc: %d \n", argc); */
-        /* exit(1); */
+int main(){
         yyparse();
         printf("Parsing completed\n");
-        if(mydebug){
-                Display(); // I noticed in cooper's output he Displays after the printf
-                // We know PROGRAM points to our AST
-                ASTprint(0, PROGRAM);
-                printf("Finished printing AST ");
-        }
-        emit_all(PROGRAM);
+        Display(); // I noticed in cooper's output he Displays after the printf
+        // We know PROGRAM points to our AST
+        ASTprint(0, PROGRAM);
+        printf("Finished printing AST ");
 }

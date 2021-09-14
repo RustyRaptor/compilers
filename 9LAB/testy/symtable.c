@@ -14,25 +14,23 @@
     We add a routine to remove variables at our level and above.
 */
 /*
-Ziad Arafat - Apr 11 2021
-Lab 7
+Ziad Arafat - Apr 26 2021
+Lab 9
 */
 
 #include <string.h>
 #include "ast.h"
 #include "symtable.h"
 
-
 int GTEMP = 0; // one up number for creating temps
-
 
 char *TEMP_CREATE()
 {
-        char s[100];
-        sprintf(s, "_T%d", GTEMP); 
-        GTEMP++;
+	char s[100];
+	sprintf(s, "_T%d", GTEMP);
+	GTEMP++;
 
-        return(strdup(s));
+	return (strdup(s));
 }
 
 struct SymbTab *first = NULL;
@@ -87,13 +85,13 @@ void PrintSym(struct SymbTab *s)
 	case ID_Sub_Type_Method:
 		string = "Method ";
 		break;
-        case ID_Sub_Type_Extern_Method:
+	case ID_Sub_Type_Extern_Method:
 		string = "Extern Method ";
 		break;
-        case ID_Sub_Type_Array:
+	case ID_Sub_Type_Array:
 		string = "Array ";
 		break;
-        // case ID_Sub_Type_Void:
+	// case ID_Sub_Type_Void:
 	// 	string = "Void ";  // OOps this is not a thing
 	// 	break;
 	default:
@@ -106,7 +104,7 @@ void PrintSym(struct SymbTab *s)
 	case A_Decaf_BOOL:
 		display_type = "BOOL ";
 		break;
-        case A_Decaf_VOID:
+	case A_Decaf_VOID:
 		display_type = "VOID ";
 		break;
 	default:
@@ -116,7 +114,7 @@ void PrintSym(struct SymbTab *s)
 	printf("%-12s%-7d%-7d%-7d%-10s%-10s\n", s->name, s->offset, s->mysize,
 	       s->level, display_type, string);
 
-        // printf("%-12s%-7d%-7d%-10s%-10s\n", s->name, s->offset,
+	// printf("%-12s%-7d%-7d%-10s%-10s\n", s->name, s->offset,
 	//        s->level, display_type, string);
 }
 
@@ -131,14 +129,14 @@ void Display()
 	printf("%-12s%-7s%-7s%-7s%-10s%-10s\n", "LABEL", "OFFSET", "SIZE",
 	       "LEVEL", "TYPE", "SUBTYPE");
 
-        // printf("%-12s%-7s%-7s%-10s%-10s\n", "LABEL", "OFFSET", 
+	// printf("%-12s%-7s%-7s%-10s%-10s\n", "LABEL", "OFFSET",
 	//        "LEVEL", "TYPE", "SUBTYPE");
 
 	while (p != NULL) {
 		PrintSym(p);
 		p = p->next;
 	}
-        printf("\n");
+	printf("\n");
 }
 
 /*  Search for a symbol name at level or below.  We have to do multiple passes into the symbol table because we have to find

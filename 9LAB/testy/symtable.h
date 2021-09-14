@@ -18,17 +18,15 @@
 
     We add a routine to remove variables at our level and above.
 */
-
 /*
-Ziad Arafat - Apr 11 2021
-Lab 7
+Ziad Arafat - Apr 26 2021
+Lab 9
 */
 
 #include "ast.h"
 
 #ifndef _SYMTAB
 #define _SYMTAB
-
 
 char *TEMP_CREATE();
 
@@ -41,9 +39,9 @@ int FetchAddr(char *lab);
 enum ID_Sub_Type {
 	ID_Sub_Type_Scalar,
 	ID_Sub_Type_Method,
-        ID_Sub_Type_Extern_Method,
+	ID_Sub_Type_Extern_Method,
 	ID_Sub_Type_Array,
-        // ID_Sub_Type_Void // OOps this is not a thing
+	// ID_Sub_Type_Void // OOps this is not a thing
 };
 
 struct SymbTab {

@@ -1,7 +1,38 @@
 extern func print_int(int) void;
+extern func print_string(string) void;
+extern func read_int() int;
 
 package foo {
+        var x int = 0;
+        
+        // func fard(x int, y bool) void {
+        //         print_int(666);
+        // }
         func main() void {
                 
+                var A[100] int;
+                var B int;
+                // fard(6, false);
+                print_int(50 + 50 - 10);
+                A[0] = 2;
+                A[1] = 4;
+                A[2] = 6;
+                A[3] = 8;
+                A[4] = 10;
+                A[5] = 12;
+                if (0) {
+                        print_int(420);
+                } else {
+                        print_int(69);
+                }
+                
+                while (x <= 5) {
+                      print_int(A[x]);
+                      print_int(x);
+                      x = x + 1;  
+                }
+                // print_int(A[x]);
         }
+
+        
 }

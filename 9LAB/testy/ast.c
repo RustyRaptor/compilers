@@ -11,8 +11,8 @@
 */
 
 /*
-Ziad Arafat - Apr 11 2021
-Lab 7
+Ziad Arafat - Apr 26 2021
+Lab 9
 */
 
 #include <stdio.h>
@@ -162,10 +162,10 @@ void ASTprint(int level, ASTnode *p)
 			break;
 
 		case A_METHODID:
-                        PT(level + 2);
+			PT(level + 2);
 			printf("Method ARG");
-                        // fixed for indentation there was a stupid space here
-			printf("%s", p->name); 
+			// fixed for indentation there was a stupid space here
+			printf("%s", p->name);
 			AST_Print_Type(p->A_Declared_Type);
 			printf("\n");
 
@@ -304,7 +304,7 @@ void ASTprint(int level, ASTnode *p)
 			printf(" METHOD CALL name: %s\n", p->name);
 			PT(level);
 			printf("(\n");
-                        PT(level);
+			PT(level);
 			printf("METHOD ARG \n");
 			ASTprint(level + 1, p->S1);
 			PT(level);
@@ -368,7 +368,6 @@ int check_operators(enum AST_Operators op, enum AST_Decaf_Types type)
 		return (1);
 		break;
 	}
-	
 }
 
 /* dummy main program so I can compile for syntax error independently   
